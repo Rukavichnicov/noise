@@ -19,4 +19,18 @@ Route::get('/', function () {
 
 Auth::routes();
 
+//TODO Изменить на свою начальную страницу
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+$groupData = [
+    'namespace' => 'App\Http\Controllers\Noise\Main',
+    'prefix' => 'noise/main',
+];
+
+Route::group($groupData, function () {
+    //Для всех пользователей
+    $methods = ['index'];
+    Route::resource('sources', \App\Http\Controllers\Noise\Main\NoiseSourceController::class)
+        ->only($methods)
+        ->names('noise.main.sources');
+});
