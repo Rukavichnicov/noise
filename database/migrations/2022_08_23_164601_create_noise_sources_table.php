@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('noise_sources', function (Blueprint $table) {
             $table->id();
-            $table->boolean('check_source');
+            $table->boolean('check_source')->default(false);
             $table->string('name');
             $table->string('mark')->nullable();
             $table->float('distance')->nullable();
