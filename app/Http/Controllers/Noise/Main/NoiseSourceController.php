@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Noise\Main;
 
+use App\Models\NoiseSource;
+use App\Models\TypeNoiseSource;
 use App\Repositories\NoiseSourceRepository;
 use Illuminate\Http\Request;
 
@@ -36,7 +38,19 @@ class NoiseSourceController extends MainController
      */
     public function create()
     {
-        //
+        // TODO количество источников, указать правильно
+        $i = 1;
+        $item = new NoiseSource();
+
+        // TODO выделить в отдельный класс
+        $columns = implode(', ', ['id', 'name']);
+
+        $TypeNoiseSource = new TypeNoiseSource;
+        $typeList = $TypeNoiseSource
+            ->selectRaw($columns)
+            ->toBase()
+            ->get();
+        return view('noise.main.create', compact('i', 'item', 'typeList'));
     }
 
     /**
@@ -47,17 +61,6 @@ class NoiseSourceController extends MainController
      */
     public function store(Request $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+        dd(__METHOD__, $request);
     }
 }

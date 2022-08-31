@@ -15,6 +15,11 @@
                             Источники шума
                         </a>
                     </li>
+                    <li>
+                        <a href="http://{{ $_SERVER['HTTP_HOST'] }}/noise/main/sources/create" class="nav-link px-2">
+                            Добавить источник
+                        </a>
+                    </li>
                 </ul>
 
                 <!-- Right Side Of Navbar -->

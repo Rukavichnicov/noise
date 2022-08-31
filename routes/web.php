@@ -29,7 +29,7 @@ $groupData = [
 
 Route::group($groupData, function () {
     //Для всех пользователей
-    $methods = ['index'];
+    $methods = ['index', 'create', 'store'];
     Route::resource('sources', \App\Http\Controllers\Noise\Main\NoiseSourceController::class)
         ->only($methods)
         ->names('noise.main.sources');
