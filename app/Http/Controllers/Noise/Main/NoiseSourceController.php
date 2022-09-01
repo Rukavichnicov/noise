@@ -39,7 +39,7 @@ class NoiseSourceController extends MainController
     public function create()
     {
         // TODO количество источников, указать правильно
-        $i = 1;
+        $count = 1;
         $item = new NoiseSource();
 
         // TODO выделить в отдельный класс
@@ -50,7 +50,7 @@ class NoiseSourceController extends MainController
             ->selectRaw($columns)
             ->toBase()
             ->get();
-        return view('noise.main.create', compact('i', 'item', 'typeList'));
+        return view('noise.main.create', compact('count', 'item', 'typeList'));
     }
 
     /**
