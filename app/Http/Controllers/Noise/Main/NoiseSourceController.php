@@ -63,12 +63,14 @@ class NoiseSourceController extends MainController
      */
     public function store(Request $request)
     {
-        $array = $request->all();
+        $downloadable_file_noise_source = $request->file('file_name');
         $file_noise_source = new FileNoiseSource();
-        $file_noise_source->file_name = $request->file()['file_name']->getClientOriginalName();
+        $file_noise_source->file_name = $downloadable_file_noise_source->getClientOriginalName();
         $file_noise_source->save();
+        $downloadable_file_noise_source->store('resources/file_sources/not_check');
         $i = 1;
 
+        $array = $request->input();
         $item = new NoiseSource;
 
         $item->name = $array['name_'.$i];
