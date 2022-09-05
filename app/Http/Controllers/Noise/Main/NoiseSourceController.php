@@ -47,8 +47,10 @@ class NoiseSourceController extends MainController
      */
     public function create()
     {
-        // TODO количество источников, указать правильно
-        $count = 1;
+        if (isset($_GET['severalSources']) && $_GET['severalSources'] > 30) {
+            $_GET['severalSources'] = 30;
+        }
+        $count = $_GET['severalSources'] ?? 1;
         $item = new NoiseSource();
 
         $typeList = $this->typeNoiseSourceRepository->getListCategories();

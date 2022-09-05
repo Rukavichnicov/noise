@@ -4,7 +4,9 @@
 @section('content')
     <div class="container">
         @include('noise.includes.result_messages')
-
+            @if (!isset($_GET['severalSources']))
+                @include('noise.main.precreate')
+            @else
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="card">
@@ -12,7 +14,7 @@
                         <form method="POST" enctype="multipart/form-data" action="{{ route('noise.main.sources.store') }}">
                             @csrf
                             @for($i = 1; $i <= $count; $i++)
-                            @include('noise.main.includes.data_single_noise_source')
+                                @include('noise.main.includes.data_single_noise_source')
                             @endfor
                             <label class="form-label">Обоснование шумовой характеристики (общее для всех)*: </label>
                             <textarea class="form-control" name="foundation" required></textarea>
@@ -26,6 +28,7 @@
                 </div>
             </div>
         </div>
+          @endif
     </div>
 @endsection
 
