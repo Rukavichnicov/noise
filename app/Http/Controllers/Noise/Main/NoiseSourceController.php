@@ -6,6 +6,7 @@ use App\Models\FileNoiseSource;
 use App\Models\NoiseSource;
 use App\Models\TypeNoiseSource;
 use App\Repositories\NoiseSourceRepository;
+use App\Repositories\TypeNoiseSourceRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,10 +17,16 @@ class NoiseSourceController extends MainController
      */
     private NoiseSourceRepository $noiseSourceRepository;
 
+    /**
+     * @var TypeNoiseSourceRepository
+     */
+    private TypeNoiseSourceRepository $typeNoiseSourceRepository;
+
     public function __construct()
     {
         parent::__construct();
         $this->noiseSourceRepository = app(NoiseSourceRepository::class);
+        $this->typeNoiseSourceRepository = app(TypeNoiseSourceRepository::class);
     }
 
     /**
@@ -44,14 +51,8 @@ class NoiseSourceController extends MainController
         $count = 1;
         $item = new NoiseSource();
 
-        // TODO выделить в отдельный класс
-        $columns = implode(', ', ['id', 'name']);
+        $typeList = $this->typeNoiseSourceRepository->getListCategories();
 
-        $TypeNoiseSource = new TypeNoiseSource;
-        $typeList = $TypeNoiseSource
-            ->selectRaw($columns)
-            ->toBase()
-            ->get();
         return view('noise.main.create', compact('count', 'item', 'typeList'));
     }
 
