@@ -13,6 +13,7 @@
                     <div class="card-body">
                         <form method="POST" enctype="multipart/form-data" action="{{ route('noise.main.sources.store') }}">
                             @csrf
+                            <input type="hidden" name="count" value="{{ $count }}">
                             @for($i = 1; $i <= $count; $i++)
                                 @include('noise.main.includes.data_single_noise_source')
                             @endfor

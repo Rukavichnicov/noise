@@ -36,23 +36,23 @@
             <td><input type="number" class="form-control" min="0"
                        max="50" step="0.01" name="distance_{{ $i }}"></td>
             <td><input class="form-control" type="number" min="0"
-                       max="200" step="0.01" name="31_5_{{ $i }}"></td>
+                       max="200" step="0.01" name="la_31_5_{{ $i }}"></td>
             <td><input class="form-control" type="number" min="0"
-                       max="200" step="0.01" name="63_{{ $i }}"></td>
+                       max="200" step="0.01" name="la_63_{{ $i }}"></td>
             <td><input class="form-control" type="number" min="0"
-                       max="200" step="0.01" name="125_{{ $i }}"></td>
+                       max="200" step="0.01" name="la_125_{{ $i }}"></td>
             <td><input class="form-control" type="number" min="0"
-                       max="200" step="0.01" name="250_{{ $i }}"></td>
+                       max="200" step="0.01" name="la_250_{{ $i }}"></td>
             <td><input class="form-control" type="number" min="0"
-                       max="200" step="0.01" name="500_{{ $i }}"></td>
+                       max="200" step="0.01" name="la_500_{{ $i }}"></td>
             <td><input class="form-control" type="number" min="0"
-                       max="200" step="0.01" name="1000_{{ $i }}"></td>
+                       max="200" step="0.01" name="la_1000_{{ $i }}"></td>
             <td><input class="form-control" type="number" min="0"
-                       max="200" step="0.01" name="2000_{{ $i }}"></td>
+                       max="200" step="0.01" name="la_2000_{{ $i }}"></td>
             <td><input class="form-control" type="number" min="0"
-                       max="200" step="0.01" name="4000_{{ $i }}"></td>
+                       max="200" step="0.01" name="la_4000_{{ $i }}"></td>
             <td><input class="form-control" type="number" min="0"
-                       max="200" step="0.01" name="8000_{{ $i }}"></td>
+                       max="200" step="0.01" name="la_8000_{{ $i }}"></td>
             <td><input class="form-control" type="number" min="0"
                        max="200" step="0.01" name="la_eq_{{ $i }}"></td>
             <td><input class="form-control" type="number" min="0"
