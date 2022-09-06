@@ -1,4 +1,3 @@
-@php use App\Models\NoiseSource; @endphp
 @extends('layouts.app')
 
 @section('content')
@@ -18,7 +17,7 @@
                                 @include('noise.main.includes.data_single_noise_source')
                             @endfor
                             <label class="form-label">Обоснование шумовой характеристики (общее для всех)*: </label>
-                            <textarea class="form-control" name="foundation" required></textarea>
+                            <textarea class="form-control" name="foundation" required>{{ old('foundation') }}</textarea>
                             <label class="form-label">Загрузите pdf файл обосновывающих шумовые характеристики (общий для
                                 всех):* </label>
                             <input class="form-control" type="file" name="file_name" accept=".pdf" required>

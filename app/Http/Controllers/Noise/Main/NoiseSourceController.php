@@ -51,11 +51,10 @@ class NoiseSourceController extends MainController
             $_GET['severalSources'] = 30;
         }
         $count = $_GET['severalSources'] ?? 1;
-        $item = new NoiseSource();
 
         $typeList = $this->typeNoiseSourceRepository->getListCategories();
 
-        return view('noise.main.create', compact('count', 'item', 'typeList'));
+        return view('noise.main.create', compact('count', 'typeList'));
     }
 
     /**
