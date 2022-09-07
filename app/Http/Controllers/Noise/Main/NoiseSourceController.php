@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Noise\Main;
 
+use App\Http\Requests\NoiseSourceCreateRequest;
 use App\Models\FileNoiseSource;
 use App\Models\NoiseSource;
-use App\Models\TypeNoiseSource;
 use App\Repositories\NoiseSourceRepository;
 use App\Repositories\TypeNoiseSourceRepository;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 
 class NoiseSourceController extends MainController
@@ -32,7 +32,7 @@ class NoiseSourceController extends MainController
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -43,7 +43,7 @@ class NoiseSourceController extends MainController
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -60,17 +60,16 @@ class NoiseSourceController extends MainController
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param NoiseSourceCreateRequest $request
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(NoiseSourceCreateRequest $request)
     {
         $downloadable_file_noise_source = $request->file('file_name');
         $file_noise_source = new FileNoiseSource();
-        $file_noise_source->file_name = $downloadable_file_noise_source->getClientOriginalName();
+        $file_noise_source->file_name = $downloadable_file_noise_source->hashName();
         $file_noise_source->save();
         $downloadable_file_noise_source->store('resources/file_sources/not_check');
-        $i = 1;
 
         $array = $request->input();
         for ($i = 1; $i <= $array['count']; $i++) {

@@ -1,9 +1,9 @@
 <fieldset class="form-control mt-1">
-    <p><b>Введите данные по отдельному источнику шума:</b></p>
+    <legend class="form-label">Источник шума №{{ $i }}</legend>
     <label class="form-label" for="name_{{ $i }}">Наименование*: </label>
-    <input class="form-control" type="text" id="name_{{ $i }}" name="name_{{ $i }}" value="{{ old('name_'.$i) }}" required>
+    <input class="form-control" type="text" id="name_{{ $i }}" name="name_{{ $i }}" value="{{ old('name_'.$i) }}" maxlength="200" required>
     <label class="form-label" for="mark_{{ $i }}">Марка: </label>
-    <input class="form-control" type="text" id="mark_{{ $i }}" name="mark_{{ $i }}" value="{{ old('mark_'.$i) }}">
+    <input class="form-control" type="text" id="mark_{{ $i }}" name="mark_{{ $i }}" value="{{ old('mark_'.$i) }}" maxlength="200">
     <label class="form-label" for="id_type_of_source_{{ $i }}">Тип источника: </label>
     <select class="form-select" id="id_type_of_source_{{ $i }}" name="id_type_of_source_{{ $i }}">
         @foreach($typeList as $typeOption)
@@ -59,7 +59,7 @@
         </tr>
     </table>
     <label for="remark_{{ $i }}">Примечание: </label>
-    <textarea class="form-control" id="remark_{{ $i }}" name="remark_{{ $i }}">{{ old('remark_'.$i) }}</textarea>
+    <textarea class="form-control" id="remark_{{ $i }}" name="remark_{{ $i }}" maxlength="1000">{{ old('remark_'.$i) }}</textarea>
 </fieldset>
 
 
