@@ -26,7 +26,7 @@ class NoiseSourceCreateRequest extends FormRequest
     {
         $rules = [];
         $rules['count'] = 'numeric|min:1|max:30|required';
-        $rules['foundation'] = 'string|min:1|max:1000|required';
+        $rules['foundation'] = 'min:1|max:1000|required';
         $rules['file_name'] = 'file|mimetypes:application/pdf|max:2048|required';
         if (is_numeric($this->request->get('count'))) {
             $count = $this->request->get('count') > 30 ? 30 : $this->request->get('count');
@@ -65,7 +65,6 @@ class NoiseSourceCreateRequest extends FormRequest
         $messages['file_name.mimetypes'] = 'Загружаемый файл должен быть формата .pdf';
         $messages['file_name.max'] = 'Максимальный размер загружаемого файла :max кбайт';
 
-        $messages['foundation.string'] = 'Обоснование источника шума должно быть строкой';
         $messages['foundation.min'] = 'Минимальная длина обоснования :min символ';
         $messages['foundation.max'] = 'Максимальная длина обоснования :max символов';
         $messages['foundation.required'] = 'Введите обоснование источника шума';
