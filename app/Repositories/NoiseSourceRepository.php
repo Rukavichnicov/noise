@@ -16,11 +16,13 @@ class NoiseSourceRepository extends CoreRepository
     {
         return Model::class;
     }
+
     /**
      * @param int|null $countPage
+     * @param bool $agreement
      * @return LengthAwarePaginator
      */
-    public function getAllWithPaginate(int $countPage = null)
+    public function getAllWithPaginate(int $countPage = null, bool $agreement = true): LengthAwarePaginator
     {
         $columns = [
             'id',
@@ -48,6 +50,7 @@ class NoiseSourceRepository extends CoreRepository
 
         $result = $this->startConditions()
                        ->select($columns)
+                       ->where('check_source', '=', $agreement)
                        ->orderBy('id', 'ASC')
                        ->paginate($countPage);
         return $result;

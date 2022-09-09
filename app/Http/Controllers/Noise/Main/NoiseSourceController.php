@@ -37,7 +37,7 @@ class NoiseSourceController extends MainController
     }
 
     /**
-     * Показ всех источников шума, с пагинацией
+     * Показ всех согласованных источников шума, с пагинацией
      *
      * @return View
      */

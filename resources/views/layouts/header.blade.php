@@ -20,6 +20,11 @@
                             Добавить источник
                         </a>
                     </li>
+                    <li>
+                        <a href="http://{{ $_SERVER['HTTP_HOST'] }}/noise/admin/sources" class="nav-link px-2">
+                            Проверить ИШ
+                        </a>
+                    </li>
                 </ul>
 
                 <!-- Right Side Of Navbar -->
