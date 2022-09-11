@@ -39,6 +39,7 @@ class NoiseSource extends Model
 
     public $timestamps = false;
     protected $fillable = [
+        'check_source',
         'name',
         'mark',
         'distance',

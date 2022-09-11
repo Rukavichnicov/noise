@@ -62,9 +62,17 @@
                                         </button>
                                     </td>
                                     <td>Ссылка на файл обоснование</td>
-                                    <td>Согласовать</td>
                                     <td>
-                                        <form action="{{ route('noise.admin.sources.destroy', $item->id) }}" method="post">
+                                        <form action="{{ route('noise.admin.sources.approve', $item->id_file_path) }}" method="post">
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit" class="form-control btn-success">
+                                                Согласовать
+                                            </button>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <form action="{{ route('noise.admin.sources.destroy', $item->id_file_path) }}" method="post">
                                             @method('DELETE')
                                             @csrf
                                             <button type="submit" class="form-control btn-danger">

@@ -88,11 +88,31 @@ class NoiseSourceController extends MainController
     /**
      * Удаление ИШ из БД
      *
-     * @param  int  $id
+     * @param int $id_file_sources
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(int $id_file_sources)
     {
-        dd(__METHOD__, $id);
+        dd(__METHOD__, $id_file_sources);
+    }
+
+    /**
+     * Согласование источников шума
+     *
+     * @param int $id_file_sources
+     */
+    public function approve(int $id_file_sources)
+    {
+        try {
+            DB::beginTransaction();
+            $this->noiseSourceRepository->approveNoiseSources($id_file_sources);
+            //TODO добавить перемещение файла из not_check
+
+            DB::commit();
+            return redirect()->route('noise.admin.sources.index')->with(['success' => 'Успешно согласовано']);
+        } catch (Exception $exception) {
+            DB::rollBack();
+            return back()->withErrors(['msg' => 'Ошибка согласования'])->withInput();
+        }
     }
 }

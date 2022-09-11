@@ -41,8 +41,12 @@ $groupDataAdmin = [
 Route::group($groupDataAdmin, function () {
     //Для администратора
     //TODO Прописать правильные методы в роуте
-    $methods = ['index', 'edit', 'destroy'];
+    $methods = ['index', 'edit', 'destroy', 'approve'];
     Route::resource('sources', \App\Http\Controllers\Noise\Admin\NoiseSourceController::class)
         ->only($methods)
         ->names('noise.admin.sources');
+    Route::patch(
+        'approve/{id_file_path}',
+        [\App\Http\Controllers\Noise\Admin\NoiseSourceController::class, 'approve']
+    )->name('noise.admin.sources.approve');
 });
