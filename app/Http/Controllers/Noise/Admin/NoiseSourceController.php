@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Noise\Admin;
 
-use App\Http\Requests\NoiseSourceCreateRequest;
+use App\Http\Requests\NoiseSourceUpdateRequest;
 use App\Repositories\FileNoiseSourceRepository;
 use App\Repositories\NoiseSourceRepository;
 use App\Repositories\TypeNoiseSourceRepository;
@@ -55,35 +55,40 @@ class NoiseSourceController extends MainController
      */
     public function edit($id)
     {
-        dd(__METHOD__, $id);
+        $item = $this->noiseSourceRepository->getEdit($id);
+        if (empty($item)) {
+            abort(404);
+        }
+        $typeList = $this->typeNoiseSourceRepository->getListCategories();
+        return view('noise.admin.edit', compact('item','typeList'));
     }
 
-//    /**
-//     * Сохранение в БД созданных источников шума и имя файла, а также сохранение файла в папке
-//     *
-//     * @param NoiseSourceCreateRequest $request
-//     * @return RedirectResponse
-//     */
-//    public function store(NoiseSourceCreateRequest $request): RedirectResponse
-//    {
-//        try {
-//            $downloadableFileNoiseSource = $request->file('file_name');
-//            $arrayInput = $request->input();
+    /**
+     * Обновляет информацию об указанном источнике шума
+     *
+     * @param  NoiseSourceUpdateRequest  $request
+     * @param  int  $id
+     * @return RedirectResponse
+     */
+    public function update(NoiseSourceUpdateRequest $request, $id)
+    {
+        dd($request, $id);
+//        $item = $this->blogPostRepository->getEdit($id);
 //
-//            DB::beginTransaction();
-//            $idFileNoiseSource = $this->fileNoiseSourceRepository->saveFileNoiseSourceBD($downloadableFileNoiseSource);
-//            for ($i = 1; $i <= $arrayInput['count']; $i++) {
-//                $this->noiseSourceRepository->saveOneModelBD($i, $arrayInput, $idFileNoiseSource);
-//            }
-//            $downloadableFileNoiseSource->store('resources/file_sources/not_check');
-//            DB::commit();
-//
-//            return redirect()->route('noise.main.sources.index')->with(['success' => 'Успешно сохранено']);
-//        } catch (Exception $exception) {
-//            DB::rollBack();
-//            return back()->withErrors(['msg' => 'Ошибка сохранения'])->withInput();
+//        if (empty($item)) {
+//            return back()->withErrors(['msg' => "Запись с id=[{$id}] не найдена."])->withInput();
 //        }
-//    }
+//
+//        $data = $request->all();
+//
+//        $result = $item->update($data);
+//
+//        if ($result) {
+//            return redirect()->route('blog.admin.posts.edit', $item->id)->with(['success' => 'Успешно сохранено']);
+//        } else {
+//            return back()->withErrors(['msg' => "Ошибка сохранения."])->withInput();
+//        }
+    }
 
     /**
      * Удаление ИШ из БД

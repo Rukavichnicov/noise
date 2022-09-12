@@ -40,8 +40,7 @@ $groupDataAdmin = [
 ];
 Route::group($groupDataAdmin, function () {
     //Для администратора
-    //TODO Прописать правильные методы в роуте
-    $methods = ['index', 'edit', 'destroy', 'approve'];
+    $methods = ['index', 'edit', 'update', 'destroy', 'approve'];
     Route::resource('sources', \App\Http\Controllers\Noise\Admin\NoiseSourceController::class)
         ->only($methods)
         ->names('noise.admin.sources');

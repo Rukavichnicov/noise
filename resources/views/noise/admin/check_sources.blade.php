@@ -27,8 +27,8 @@
                                 <th>La экв</th>
                                 <th>La макс</th>
                                 <th>Примечание</th>
-                                <th>Обоснование</th>
                                 <th>Изменить</th>
+                                <th>Обоснование</th>
                                 <th>Ссылка на файл обоснование</th>
                                 <th>Согласовать</th>
                                 <th>Удалить</th>
@@ -53,7 +53,6 @@
                                     <td> {{$item->la_eq}} </td>
                                     <td> {{$item->la_max}} </td>
                                     <td> {{$item->remark}} </td>
-                                    <td> {{$item->foundation}} </td>
                                     <td>
                                         <button type="submit" class="form-control">
                                             <a href="{{ route('noise.admin.sources.edit', $item->id) }}" class="link-dark">
@@ -61,6 +60,7 @@
                                             </a>
                                         </button>
                                     </td>
+                                    <td> {{$item->foundation}} </td>
                                     <td>Ссылка на файл обоснование</td>
                                     <td>
                                         <form action="{{ route('noise.admin.sources.approve', $item->id_file_path) }}" method="post">
