@@ -32,7 +32,7 @@ class FileNoiseSourceRepository extends CoreRepository
      * @param int $id
      * @return Model
      */
-    public function getEdit(int $id)
+    public function getFileNoiseSources(int $id): Model
     {
         return $this->startConditions()->find($id);
     }

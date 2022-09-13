@@ -9,6 +9,7 @@ use App\Repositories\TypeNoiseSourceRepository;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class NoiseSourceController extends MainController
@@ -111,13 +112,21 @@ class NoiseSourceController extends MainController
         try {
             DB::beginTransaction();
             $this->noiseSourceRepository->approveNoiseSources($id_file_sources);
-            //TODO добавить перемещение файла из not_check
+
+            $nameFile = ($this->fileNoiseSourceRepository->getFileNoiseSources($id_file_sources))->file_name;
+            $oldPathWithName = PATH_FILES_NOT_CHECK . $nameFile;
+            if (Storage::disk()->exists($oldPathWithName)) {
+                $newPathWithName = PATH_FILES_CHECK . $nameFile;
+                Storage::move($oldPathWithName, $newPathWithName);
+            } else {
+                throw new Exception('Файл источника шума не найден');
+            }
 
             DB::commit();
             return redirect()->route('noise.admin.sources.index')->with(['success' => 'Успешно согласовано']);
         } catch (Exception $exception) {
             DB::rollBack();
-            return back()->withErrors(['msg' => 'Ошибка согласования'])->withInput();
+            return back()->withErrors(['msg' => $exception->getMessage()]);
         }
     }
 }
