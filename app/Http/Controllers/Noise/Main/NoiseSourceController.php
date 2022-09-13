@@ -79,7 +79,7 @@ class NoiseSourceController extends MainController
             for ($i = 1; $i <= $arrayInput['count']; $i++) {
                 $this->noiseSourceRepository->saveOneModelBD($i, $arrayInput, $idFileNoiseSource);
             }
-            $downloadableFileNoiseSource->store('resources/file_sources/not_check');
+            $downloadableFileNoiseSource->store(PATH_FILES_NOT_CHECK);
             DB::commit();
 
             return redirect()->route('noise.main.sources.index')->with(['success' => 'Успешно сохранено']);
