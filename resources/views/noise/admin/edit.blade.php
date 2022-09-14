@@ -70,7 +70,7 @@
             <label for="remark">Примечание: </label>
             <textarea class="form-control" id="remark" name="remark">{{ old('remark', $item->remark) }}</textarea>
             <label class="form-label">Обоснование шумовой характеристики: </label>
-            <textarea class="form-control mb-2" name="foundation" maxlength="1000" required>{{ old('foundation', $item->foundation) }}</textarea>
+            <textarea class="form-control mb-2" name="foundation" maxlength="1000" required>{{ old('foundation', $item->fileNoiseSource->foundation) }}</textarea>
             <!-- TODO сделать рабочую ссылку -->
             <a href="/" target="_blank">Просмотр файла обоснования</a>
             <input type="submit" class="form-control mt-2 btn btn-primary" value="Сохранить изменения" name="submit">

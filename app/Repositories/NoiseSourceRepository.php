@@ -41,7 +41,6 @@ class NoiseSourceRepository extends CoreRepository
             'la_8000',
             'la_eq',
             'la_max',
-            'foundation',
             'remark',
             'id_file_path',
             'id_type_of_source',
@@ -80,7 +79,6 @@ class NoiseSourceRepository extends CoreRepository
         $item->la_8000 = $array['la_8000_' . $i];
         $item->la_eq = $array['la_eq_' . $i];
         $item->la_max = $array['la_max_' . $i];
-        $item->foundation = $array['foundation'];
         $item->remark = $array['remark_' . $i];
         $item->id_file_path = $idFileNoiseSource;
         $item->id_type_of_source = $array['id_type_of_source_' . $i];

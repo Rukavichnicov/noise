@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property int $id
  * @property string $file_name
+ * @property string $foundation
  *
  */
 class FileNoiseSource extends Model
@@ -21,5 +22,8 @@ class FileNoiseSource extends Model
     public $timestamps = false;
     protected $fillable = [
         'file_name',
+        'foundation',
     ];
+
+
 }

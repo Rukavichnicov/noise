@@ -20,10 +20,11 @@ class FileNoiseSourceRepository extends CoreRepository
      * @param array|UploadedFile $downloadableFileNoiseSource
      * @return int
      */
-    public function saveFileNoiseSourceBD(array|UploadedFile $downloadableFileNoiseSource): int
+    public function saveFileNoiseSourceBD(array|UploadedFile $downloadableFileNoiseSource, $arrayInput): int
     {
         $fileNoiseSource = new Model();
         $fileNoiseSource->file_name = $downloadableFileNoiseSource->hashName();
+        $fileNoiseSource->foundation = $arrayInput['foundation'];
         $fileNoiseSource->save();
         return $fileNoiseSource->id;
     }

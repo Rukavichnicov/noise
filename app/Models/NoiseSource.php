@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * Class NoiseSource
@@ -26,10 +27,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property float $la_8000
  * @property float $la_eq
  * @property float $la_max
- * @property string $foundation
  * @property string $remark
  * @property int $id_file_path
  * @property int $id_type_of_source
+ * @property FileNoiseSource $fileNoiseSource
  * @property int $id_user
  *
  */
@@ -54,10 +55,17 @@ class NoiseSource extends Model
         'la_8000',
         'la_eq',
         'la_max',
-        'foundation',
         'remark',
         'id_file_path',
         'id_type_of_source',
         'id_user',
     ];
+
+    /**
+     * @return BelongsTo
+     */
+    public function fileNoiseSource(): BelongsTo
+    {
+        return $this->belongsTo(FileNoiseSource::class, 'id_file_path');
+    }
 }

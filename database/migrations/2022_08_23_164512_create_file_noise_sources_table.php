@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('file_noise_sources', function (Blueprint $table) {
             $table->id();
             $table->string('file_name')->unique();
+            $table->text('foundation');
         });
     }
 

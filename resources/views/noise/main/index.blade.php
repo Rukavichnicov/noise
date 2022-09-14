@@ -48,7 +48,7 @@
                                     <td> {{$item->la_8000}} </td>
                                     <td> {{$item->la_eq}} </td>
                                     <td> {{$item->la_max}} </td>
-                                    <td> {{$item->foundation}} </td>
+                                    <td> {{$item->fileNoiseSource->foundation}} </td>
                                     <td> {{$item->remark}} </td>
                                 </tr>
                             @endforeach

@@ -30,7 +30,6 @@ return new class extends Migration
             $table->float('la_8000')->nullable();
             $table->float('la_eq')->nullable();
             $table->float('la_max')->nullable();
-            $table->text('foundation');
             $table->text('remark')->nullable();
             $table->unsignedBigInteger('id_file_path');
             $table->unsignedBigInteger('id_type_of_source');

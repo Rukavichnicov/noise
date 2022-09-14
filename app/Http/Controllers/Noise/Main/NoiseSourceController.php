@@ -75,7 +75,7 @@ class NoiseSourceController extends MainController
             $arrayInput = $request->input();
 
             DB::beginTransaction();
-            $idFileNoiseSource = $this->fileNoiseSourceRepository->saveFileNoiseSourceBD($downloadableFileNoiseSource);
+            $idFileNoiseSource = $this->fileNoiseSourceRepository->saveFileNoiseSourceBD($downloadableFileNoiseSource, $arrayInput);
             for ($i = 1; $i <= $arrayInput['count']; $i++) {
                 $this->noiseSourceRepository->saveOneModelBD($i, $arrayInput, $idFileNoiseSource);
             }
