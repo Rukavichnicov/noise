@@ -96,6 +96,15 @@ class NoiseSourceRepository extends CoreRepository
     }
 
     /**
+     * @param int $id_file_sources
+     */
+    public function deleteNoiseSources(int $id_file_sources)
+    {
+        $item = Model::where('id_file_path', '=', $id_file_sources);
+        $item->delete();
+    }
+
+    /**
      * @param int $id
      * @return Model
      */

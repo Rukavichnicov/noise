@@ -30,6 +30,13 @@ class FileNoiseSourceRepository extends CoreRepository
     }
 
     /**
+     * @param int $id_file_sources
+     */
+    public function deleteFileNoiseSources(int $id_file_sources)
+    {
+        Model::destroy($id_file_sources);
+    }
+    /**
      * @param int $id
      * @return Model
      */

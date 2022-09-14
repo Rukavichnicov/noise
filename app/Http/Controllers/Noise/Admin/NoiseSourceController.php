@@ -51,10 +51,10 @@ class NoiseSourceController extends MainController
     /**
      * Показ формы для редактирования источника шума
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return View
      */
-    public function edit($id)
+    public function edit(int $id): View
     {
         $item = $this->noiseSourceRepository->getEdit($id);
         if (empty($item)) {
@@ -95,11 +95,28 @@ class NoiseSourceController extends MainController
      * Удаление ИШ из БД
      *
      * @param int $id_file_sources
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse
      */
     public function destroy(int $id_file_sources)
     {
-        dd(__METHOD__, $id_file_sources);
+        try {
+            DB::beginTransaction();
+            $this->noiseSourceRepository->deleteNoiseSources($id_file_sources);
+            $nameFile = ($this->fileNoiseSourceRepository->getFileNoiseSources($id_file_sources))->file_name;
+            $oldPathWithName = PATH_FILES_NOT_CHECK . $nameFile;
+            $this->fileNoiseSourceRepository->deleteFileNoiseSources($id_file_sources);
+            if (Storage::disk()->exists($oldPathWithName)) {
+                Storage::disk()->delete($oldPathWithName);
+            } else {
+                throw new Exception('Ошибка удаления');
+            }
+
+            DB::commit();
+            return redirect()->route('noise.admin.sources.index')->with(['success' => 'Успешно удалено']);
+        } catch (Exception $exception) {
+            DB::rollBack();
+            return back()->withErrors(['msg' => $exception->getMessage()]);
+        }
     }
 
     /**
