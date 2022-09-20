@@ -28,6 +28,7 @@
                                 <th>La макс</th>
                                 <th>Обоснование</th>
                                 <th>Примечание</th>
+                                <th>Файл</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -50,6 +51,9 @@
                                     <td> {{$item->la_max}} </td>
                                     <td> {{$item->fileNoiseSource->foundation}} </td>
                                     <td> {{$item->remark}} </td>
+                                    <td>
+                                        <a href="{{ $item->urlFileCheck }}" target="_blank">Файл</a>
+                                    </td>
                                 </tr>
                             @endforeach
                             </tbody>

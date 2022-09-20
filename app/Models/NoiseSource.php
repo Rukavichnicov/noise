@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * Class NoiseSource
@@ -32,6 +34,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $id_type_of_source
  * @property FileNoiseSource $fileNoiseSource
  * @property int $id_user
+ * @property string $urlFileCheck
+ * @property string $urlFileNotCheck
  *
  */
 class NoiseSource extends Model
@@ -67,5 +71,32 @@ class NoiseSource extends Model
     public function fileNoiseSource(): BelongsTo
     {
         return $this->belongsTo(FileNoiseSource::class, 'id_file_path');
+    }
+
+    /**
+     * Получить URL для открытия файла ИШ проверенного
+     *
+     * @return Attribute
+     */
+    public function urlFileCheck(): Attribute
+    {
+        $path = PATH_FILES_CHECK . $this->fileNoiseSource->file_name;
+        $url = Storage::url($path);
+        return Attribute::make(
+            get: fn () => $url,
+        );
+    }
+    /**
+     * Получить URL для открытия файла ИШ не проверенного
+     *
+     * @return Attribute
+     */
+    public function urlFileNotCheck(): Attribute
+    {
+        $path = PATH_FILES_NOT_CHECK . $this->fileNoiseSource->file_name;
+        $url = Storage::url($path);
+        return Attribute::make(
+            get: fn () => $url,
+        );
     }
 }

@@ -61,7 +61,9 @@
                                         </button>
                                     </td>
                                     <td> {{$item->fileNoiseSource->foundation}} </td>
-                                    <td>Ссылка на файл обоснование</td>
+                                    <td>
+                                        <a href="{{ $item->urlFileNotCheck }}" target="_blank">Файл</a>
+                                    </td>
                                     <td>
                                         <form action="{{ route('noise.admin.sources.approve', $item->id_file_path) }}" method="post">
                                             @csrf
