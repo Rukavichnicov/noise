@@ -9,8 +9,8 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-body">
-                        <table class="table table-sm table-striped small">
-                            <thead>
+                        <table class="table table-sm table-striped align-middle small text-center">
+                            <thead class="align-middle">
                             <tr>
                                 <th>Наименование источника шума</th>
                                 <th>Марка</th>

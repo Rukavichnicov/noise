@@ -56,6 +56,43 @@ class NoiseSourceRepository extends CoreRepository
     }
 
     /**
+     * @param int|null $countPage
+     * @param bool $agreement
+     */
+    public function getAllNotCheck()
+    {
+        $columns = [
+            'id',
+            'check_source',
+            'name',
+            'mark',
+            'distance',
+            'la_31_5',
+            'la_63',
+            'la_125',
+            'la_250',
+            'la_500',
+            'la_1000',
+            'la_2000',
+            'la_4000',
+            'la_8000',
+            'la_eq',
+            'la_max',
+            'remark',
+            'id_file_path',
+            'id_type_of_source',
+            'id_user',
+        ];
+
+        $result = $this->startConditions()
+            ->select($columns)
+            ->where('check_source', '=', false)
+            ->orderBy('id', 'ASC')
+            ->get();
+        return $result;
+    }
+
+    /**
      *
      * @param int $i
      * @param array $array

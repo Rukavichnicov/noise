@@ -9,8 +9,8 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-body">
-                        <table class="table table-sm table-striped small">
-                            <thead>
+                        <table class="table table-sm table-bordered align-middle small text-center">
+                            <thead class="table-light align-middle">
                             <tr>
                                 <th>Наименование источника шума</th>
                                 <th>Марка</th>
@@ -29,13 +29,19 @@
                                 <th>Примечание</th>
                                 <th>Изменить</th>
                                 <th>Обоснование</th>
-                                <th>Ссылка на файл обоснование</th>
+                                <th>Файл</th>
                                 <th>Согласовать</th>
                                 <th>Удалить</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($paginator as $item)
+                            @php
+                                //отслеживание указателя в массиве
+                                $i = 0;
+                                // отслеживание момента для смены указателя
+                                $j = 0;
+                            @endphp
+                            @foreach($noiseSourcesNotCheck as $item)
                                 @php /** @var NoiseSource $item */ @endphp
                                 <tr>
                                     <td> {{$item->name}} </td>
@@ -54,34 +60,26 @@
                                     <td> {{$item->la_max}} </td>
                                     <td> {{$item->remark}} </td>
                                     <td>
-                                        <button type="submit" class="form-control">
-                                            <a href="{{ route('noise.admin.sources.edit', $item->id) }}" class="link-dark">
+                                        <form action="{{ route('noise.admin.sources.edit', $item->id) }}" method="get">
+                                            <button type="submit" class="form-control-sm">
                                                 Изменить
-                                            </a>
-                                        </button>
-                                    </td>
-                                    <td> {{$item->fileNoiseSource->foundation}} </td>
-                                    <td>
-                                        <a href="{{ $item->urlFileNotCheck }}" target="_blank">Файл</a>
-                                    </td>
-                                    <td>
-                                        <form action="{{ route('noise.admin.sources.approve', $item->id_file_path) }}" method="post">
-                                            @csrf
-                                            @method('PATCH')
-                                            <button type="submit" class="form-control btn-success">
-                                                Согласовать
                                             </button>
                                         </form>
                                     </td>
-                                    <td>
-                                        <form action="{{ route('noise.admin.sources.destroy', $item->id_file_path) }}" method="post">
-                                            @method('DELETE')
-                                            @csrf
-                                            <button type="submit" class="form-control btn-danger">
-                                                Удалить
-                                            </button>
-                                        </form>
-                                    </td>
+                                    @if($i === 0 && $j === 0)
+                                        @include('noise.admin.includes.general_data')
+                                    @endif
+                                    @if($arrayRowSpan[$i] !== $j)
+                                        @php
+                                            $j++;
+                                        @endphp
+                                    @else
+                                        @php
+                                            $j = 1;
+                                            $i++;
+                                        @endphp
+                                        @include('noise.admin.includes.general_data')
+                                    @endif
                                 </tr>
                             @endforeach
                             </tbody>
@@ -90,14 +88,6 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div>
-        @if($paginator->total() > $paginator->count())
-            <br>
-            <div class="d-flex justify-content-center">
-                {{ $paginator->links() }}
-            </div>
-        @endif
     </div>
 @endsection
 
