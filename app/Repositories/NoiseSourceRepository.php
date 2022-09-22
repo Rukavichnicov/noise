@@ -51,6 +51,7 @@ class NoiseSourceRepository extends CoreRepository
                        ->select($columns)
                        ->where('check_source', '=', $agreement)
                        ->orderBy('id', 'ASC')
+                       ->with(['fileNoiseSource:id,file_name,foundation'])
                        ->paginate($countPage);
         return $result;
     }
@@ -88,6 +89,7 @@ class NoiseSourceRepository extends CoreRepository
             ->select($columns)
             ->where('check_source', '=', false)
             ->orderBy('id', 'ASC')
+            ->with(['fileNoiseSource:id,file_name,foundation'])
             ->get();
         return $result;
     }
