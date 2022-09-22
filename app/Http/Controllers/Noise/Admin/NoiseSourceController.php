@@ -86,22 +86,26 @@ class NoiseSourceController extends MainController
      */
     public function update(NoiseSourceUpdateRequest $request, $id)
     {
-        dd($request, $id);
-//        $item = $this->blogPostRepository->getEdit($id);
-//
-//        if (empty($item)) {
-//            return back()->withErrors(['msg' => "Запись с id=[{$id}] не найдена."])->withInput();
-//        }
-//
-//        $data = $request->all();
-//
-//        $result = $item->update($data);
-//
-//        if ($result) {
-//            return redirect()->route('blog.admin.posts.edit', $item->id)->with(['success' => 'Успешно сохранено']);
-//        } else {
-//            return back()->withErrors(['msg' => "Ошибка сохранения."])->withInput();
-//        }
+        $noiseSource = $this->noiseSourceRepository->getEdit($id);
+
+        if (empty($noiseSource)) {
+            return back()->withErrors(['msg' => "Запись с id=[{$id}] для ИШ не найдена."])->withInput();
+        }
+        $fileNoiseSource = $this->fileNoiseSourceRepository->getFileNoiseSources($noiseSource->id_file_path);
+        if (empty($fileNoiseSource)) {
+            return back()->withErrors(['msg' => "Запись с id=[{$noiseSource->id_file_path}] для описания не найдена."])->withInput();
+        }
+
+        $data = $request->all();
+
+        $result1 = $noiseSource->update($data);
+        $result2 = $fileNoiseSource->update($data);
+
+        if ($result1 && $result2) {
+            return redirect()->route('noise.admin.sources.edit', $noiseSource->id)->with(['success' => 'Успешно сохранено']);
+        } else {
+            return back()->withErrors(['msg' => "Ошибка сохранения."])->withInput();
+        }
     }
 
     /**

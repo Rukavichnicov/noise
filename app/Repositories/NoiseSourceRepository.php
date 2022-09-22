@@ -2,7 +2,6 @@
 
 namespace App\Repositories;
 
-use App\Models\FileNoiseSource;
 use App\Models\NoiseSource as Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
@@ -12,12 +11,13 @@ class NoiseSourceRepository extends CoreRepository
     /**
      * @return string
      */
-    protected function getModelClass()
+    protected function getModelClass(): string
     {
         return Model::class;
     }
 
     /**
+     * Получить данные проверенных источников шума с пагинацией
      * @param int|null $countPage
      * @param bool $agreement
      * @return LengthAwarePaginator
@@ -57,8 +57,7 @@ class NoiseSourceRepository extends CoreRepository
     }
 
     /**
-     * @param int|null $countPage
-     * @param bool $agreement
+     *  Получить данные всех не проверенных источников шума
      */
     public function getAllNotCheck()
     {
@@ -145,9 +144,9 @@ class NoiseSourceRepository extends CoreRepository
 
     /**
      * @param int $id
-     * @return Model
+     * @return ?Model
      */
-    public function getEdit(int $id)
+    public function getEdit(int $id): ?Model
     {
         return $this->startConditions()->find($id);
     }

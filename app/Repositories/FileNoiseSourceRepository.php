@@ -38,9 +38,9 @@ class FileNoiseSourceRepository extends CoreRepository
     }
     /**
      * @param int $id
-     * @return Model
+     * @return ?Model
      */
-    public function getFileNoiseSources(int $id): Model
+    public function getFileNoiseSources(int $id): ?Model
     {
         return $this->startConditions()->find($id);
     }

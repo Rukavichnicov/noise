@@ -32,9 +32,9 @@ class TypeNoiseSourceRepository extends CoreRepository
 
     /**
      * @param int $id
-     * @return Model
+     * @return ?Model
      */
-    public function getEdit(int $id)
+    public function getEdit(int $id): ?Model
     {
         return $this->startConditions()->find($id);
     }
