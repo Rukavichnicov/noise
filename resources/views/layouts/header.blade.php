@@ -25,6 +25,11 @@
                             Проверить ИШ
                         </a>
                     </li>
+                    <li>
+                        <a href="http://{{ $_SERVER['HTTP_HOST'] }}/noise/main/basket" class="nav-link px-2">
+                            Свой список ИШ
+                        </a>
+                    </li>
                 </ul>
 
                 <!-- Right Side Of Navbar -->

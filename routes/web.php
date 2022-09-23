@@ -28,10 +28,15 @@ $groupDataMain = [
 ];
 Route::group($groupDataMain, function () {
     //Для всех пользователей
-    $methods = ['index', 'create', 'store'];
+    $methodsSources = ['index', 'create', 'store'];
     Route::resource('sources', \App\Http\Controllers\Noise\Main\NoiseSourceController::class)
-        ->only($methods)
+        ->only($methodsSources)
         ->names('noise.main.sources');
+    // TODO написать правильные методы в роутах
+    $methodsBasket = ['index', 'create', 'store', 'destroy'];
+    Route::resource('basket', \App\Http\Controllers\Noise\Main\BasketSourcesController::class)
+        ->only($methodsBasket)
+        ->names('noise.main.basket');
 });
 
 $groupDataAdmin = [
