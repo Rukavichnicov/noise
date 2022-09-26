@@ -34,7 +34,7 @@ Route::group($groupDataMain, function () {
         ->names('noise.main.sources');
     // TODO написать правильные методы в роутах
     $methodsBasket = ['index', 'create', 'store', 'destroy'];
-    Route::resource('basket', \App\Http\Controllers\Noise\Main\BasketSourcesController::class)
+    Route::resource('basket', \App\Http\Controllers\Noise\Main\BasketController::class)
         ->only($methodsBasket)
         ->names('noise.main.basket');
 });

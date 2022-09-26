@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Noise\Main;
 
+use App\Repositories\BasketRepository;
 use App\Repositories\FileNoiseSourceRepository;
 use App\Repositories\NoiseSourceRepository;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-class BasketSourcesController extends MainController
+class BasketController extends MainController
 {
     /**
      * @var NoiseSourceRepository
@@ -19,11 +20,17 @@ class BasketSourcesController extends MainController
      */
     private FileNoiseSourceRepository $fileNoiseSourceRepository;
 
+    /**
+     * @var BasketRepository
+     */
+    private BasketRepository $basketRepository;
+
     public function __construct()
     {
         parent::__construct();
         $this->noiseSourceRepository = app(NoiseSourceRepository::class);
         $this->fileNoiseSourceRepository = app(FileNoiseSourceRepository::class);
+        $this->basketRepository = app(BasketRepository::class);
     }
     /**
      * Показ всех согласованных источников шума, с пагинацией
@@ -32,7 +39,7 @@ class BasketSourcesController extends MainController
      */
     public function index(): View
     {
-        $paginator = $this->noiseSourceRepository->getAllWithPaginate(10);
+        $paginator = $this->basketRepository->getAllWithPaginate(10);
         return view('noise.main.basket_sources', compact('paginator'));
     }
 
