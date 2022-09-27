@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Noise\Main;
 
+use App\Http\Requests\BasketCreateRequest;
 use App\Repositories\BasketRepository;
 use App\Repositories\FileNoiseSourceRepository;
 use App\Repositories\NoiseSourceRepository;
-use Illuminate\Http\Request;
+use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
 class BasketController extends MainController
@@ -33,7 +35,6 @@ class BasketController extends MainController
         $this->basketRepository = app(BasketRepository::class);
     }
     /**
-     * Показ всех согласованных источников шума, с пагинацией
      *
      * @return View
      */
@@ -44,62 +45,22 @@ class BasketController extends MainController
     }
 
     /**
-     * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param  BasketCreateRequest  $request
+     * @return RedirectResponse
      */
-    public function create()
+    public function store(BasketCreateRequest $request): RedirectResponse
     {
-        //
+        try {
+            $arrayInput = $request->input();
+            $this->basketRepository->saveOneModelBD($arrayInput);
+            return back();
+        } catch (Exception $exception) {
+            return back()->withErrors(['msg' => 'Ошибка сохранения']);
+        }
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        dd(__METHOD__);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response

@@ -10,6 +10,15 @@ class Basket extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'id',
+        'id_user',
+        'id_noise_source',
+        'created_at',
+    ];
+
+    public $timestamps = false;
+
     /**
      * @return BelongsTo
      */

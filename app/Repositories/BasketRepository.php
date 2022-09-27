@@ -17,9 +17,8 @@ class BasketRepository extends CoreRepository
     }
 
     /**
-     * Получить данные проверенных источников шума с пагинацией
+     * Получить данные источников шума в корзине пользователя с пагинацией
      * @param int|null $countPage
-     * @param bool $agreement
      * @return LengthAwarePaginator
      */
     public function getAllWithPaginate(int $countPage = null): LengthAwarePaginator
@@ -40,16 +39,30 @@ class BasketRepository extends CoreRepository
     }
 
     /**
+     * Пытается найти в корзине у пользователя источник шума
+     */
+    public function findInBasketUser($idNoiseSource): array
+    {
+        $result = $this->startConditions()
+            ->select('id')
+            ->where('id_user', '=', Auth::id())
+            ->where('id_noise_source', '=', $idNoiseSource)
+            ->get()
+            ->toArray();
+        return $result;
+    }
+
+    /**
      *
-     * @param int $i
      * @param array $array
-     * @param int $idFileNoiseSource
      * @return bool
      */
-    public function saveOneModelBD(int $i, array $array, int $idFileNoiseSource): bool
+    public function saveOneModelBD(array $array): bool
     {
         $item = new Model();
         $item->id_user = Auth::id();
+        $item->id_noise_source = (int) $array['addSources'];
+        $item->created_at = now();
         return $item->save();
     }
 
