@@ -67,11 +67,14 @@ class BasketRepository extends CoreRepository
     }
 
     /**
-     * @param int $id_file_sources
+     * @param int $idNoiseSource
      */
-    public function deleteNoiseSources(int $id_file_sources)
+    public function deleteNoiseSourceInBasket(int $idNoiseSource)
     {
-        $item = Model::where('id_file_path', '=', $id_file_sources);
-        $item->delete();
+        $result = $this->startConditions()
+                       ->where('id_user', '=', Auth::id())
+                       ->where('id_noise_source', '=', $idNoiseSource)
+                       ->delete();
+        return $result;
     }
 }

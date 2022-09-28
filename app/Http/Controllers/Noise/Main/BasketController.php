@@ -13,16 +13,6 @@ use Illuminate\View\View;
 class BasketController extends MainController
 {
     /**
-     * @var NoiseSourceRepository
-     */
-    private NoiseSourceRepository $noiseSourceRepository;
-
-    /**
-     * @var FileNoiseSourceRepository
-     */
-    private FileNoiseSourceRepository $fileNoiseSourceRepository;
-
-    /**
      * @var BasketRepository
      */
     private BasketRepository $basketRepository;
@@ -30,8 +20,6 @@ class BasketController extends MainController
     public function __construct()
     {
         parent::__construct();
-        $this->noiseSourceRepository = app(NoiseSourceRepository::class);
-        $this->fileNoiseSourceRepository = app(FileNoiseSourceRepository::class);
         $this->basketRepository = app(BasketRepository::class);
     }
     /**
@@ -62,11 +50,19 @@ class BasketController extends MainController
 
     /**
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  int  $idNoiseSource
+     * @return RedirectResponse
      */
-    public function destroy($id)
+    public function destroy($idNoiseSource)
     {
-        dd(__METHOD__);
+        try {
+            $result = $this->basketRepository->deleteNoiseSourceInBasket($idNoiseSource);
+            if($result === 0) {
+                throw new Exception('Ошибка удаления файла из списка');
+            }
+            return back();
+        } catch (Exception $exception) {
+            return back()->withErrors(['msg' => $exception->getMessage()]);
+        }
     }
 }
