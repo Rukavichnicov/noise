@@ -46,7 +46,24 @@
                 <a href="{{ $item->noiseSource->urlFileCheck }}" target="_blank">Файл</a>
             </td>
             <td>
-                @include('noise.main.includes.button_add_and_del')
+                @if ($item->noiseSource->isThereSourceInBasket)
+                    <form action="{{ route('noise.main.basket.destroy', $item->noiseSource->id) }}" method="post">
+                        @csrf
+                        @method('DELETE')
+                        <button class="form-control-sm btn-danger"
+                                name="delSources"
+                                value="{{ $item->noiseSource->id }}"
+                                title="Удалить из набора">-</button>
+                    </form>
+                @else
+                    <form action="{{ route('noise.main.basket.store') }}" method="post">
+                        @csrf
+                        <button class="form-control-sm btn-primary"
+                                name="addSources"
+                                value="{{ $item->noiseSource->id }}"
+                                title="Добавить в набор">+</button>
+                    </form>
+                @endif
             </td>
         </tr>
     @endforeach

@@ -16,7 +16,6 @@
             <label class="form-label" for="id_type_of_source">Тип источника: </label>
             <select class="form-select" id="id_type_of_source" name="id_type_of_source">
                 @foreach($typeList as $typeOption)
-                    <!-- TODO подумать как сделать лучше автоматическую генерацию свойств -->
                     <option value="{{ $typeOption->id }}"
                             @if($typeOption->id == old('id_type_of_source', $item->id_type_of_source))
                                 selected
