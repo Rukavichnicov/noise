@@ -111,17 +111,17 @@ class NoiseSourceController extends MainController
     /**
      * Удаление ИШ из БД
      *
-     * @param int $id_file_sources
+     * @param int $idFileSources
      * @return RedirectResponse
      */
-    public function destroy(int $id_file_sources)
+    public function destroy(int $idFileSources): RedirectResponse
     {
         try {
             DB::beginTransaction();
-            $this->noiseSourceRepository->deleteNoiseSources($id_file_sources);
-            $nameFile = ($this->fileNoiseSourceRepository->getFileNoiseSources($id_file_sources))->file_name;
+            $this->noiseSourceRepository->deleteNoiseSources($idFileSources);
+            $nameFile = ($this->fileNoiseSourceRepository->getFileNoiseSources($idFileSources))->file_name;
             $oldPathWithName = PATH_FILES_NOT_CHECK . $nameFile;
-            $this->fileNoiseSourceRepository->deleteFileNoiseSources($id_file_sources);
+            $this->fileNoiseSourceRepository->deleteFileNoiseSources($idFileSources);
             if (Storage::disk()->exists($oldPathWithName)) {
                 Storage::disk()->delete($oldPathWithName);
             } else {

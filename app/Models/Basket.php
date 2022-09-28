@@ -6,6 +6,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * Class NoiseSource
+ *
+ * @package App\Models\NoiseSource
+ *
+ * @property int $id
+ * @property int $id_user
+ * @property int $id_noise_source
+ * @property string $created_at
+ * @property NoiseSource $noiseSource
+ * @property User $user
+ *
+ */
 class Basket extends Model
 {
     use HasFactory;
