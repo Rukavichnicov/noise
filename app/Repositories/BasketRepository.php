@@ -33,7 +33,7 @@ class BasketRepository extends CoreRepository
                        ->select($columns)
                        ->where('id_user', '=', Auth::id())
                        ->orderBy('id', 'ASC')
-                       ->with(['user:id','noiseSource'])
+                       ->with(['user:id','noiseSource','fileNoiseSource'])
                        ->paginate($countPage);
         return $result;
     }
@@ -69,7 +69,7 @@ class BasketRepository extends CoreRepository
     /**
      * @param int $idNoiseSource
      */
-    public function deleteNoiseSourceInBasket(int $idNoiseSource)
+    public function deleteNoiseSourceInBasket($idNoiseSource)
     {
         $result = $this->startConditions()
                        ->where('id_user', '=', Auth::id())

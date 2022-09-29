@@ -19,7 +19,7 @@
         <th>Обоснование</th>
         <th>Примечание</th>
         <th>Файл</th>
-        <th>Сбор списка</th>
+        <th>Удалить</th>
     </tr>
     </thead>
     <tbody>
@@ -40,30 +40,20 @@
             <td> {{$item->noiseSource->la_8000}} </td>
             <td> {{$item->noiseSource->la_eq}} </td>
             <td> {{$item->noiseSource->la_max}} </td>
-            <td> {{$item->noiseSource->fileNoiseSource->foundation}} </td>
+            <td> {{$item->fileNoiseSource->foundation}} </td>
             <td> {{$item->noiseSource->remark}} </td>
             <td>
-                <a href="{{ $item->noiseSource->urlFileCheck }}" target="_blank">Файл</a>
+                <a href="{{ $item->urlFileCheck }}" target="_blank">Файл</a>
             </td>
             <td>
-                @if ($item->noiseSource->isThereSourceInBasket)
-                    <form action="{{ route('noise.main.basket.destroy', $item->noiseSource->id) }}" method="post">
-                        @csrf
-                        @method('DELETE')
-                        <button class="form-control-sm btn-danger"
-                                name="delSources"
-                                value="{{ $item->noiseSource->id }}"
-                                title="Удалить из набора">-</button>
-                    </form>
-                @else
-                    <form action="{{ route('noise.main.basket.store') }}" method="post">
-                        @csrf
-                        <button class="form-control-sm btn-primary"
-                                name="addSources"
-                                value="{{ $item->noiseSource->id }}"
-                                title="Добавить в набор">+</button>
-                    </form>
-                @endif
+                <form action="{{ route('noise.main.basket.destroy', $item->noiseSource->id) }}" method="post">
+                    @csrf
+                    @method('DELETE')
+                    <button class="form-control-sm btn-danger"
+                            name="delSources"
+                            value="{{ $item->noiseSource->id }}"
+                            title="Удалить из набора">-</button>
+                </form>
             </td>
         </tr>
     @endforeach

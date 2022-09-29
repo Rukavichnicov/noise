@@ -99,8 +99,8 @@ class NoiseSource extends Model
     {
         $basket = new Basket();
         $basket = $basket->where('id_user', '=', Auth::id())
-                                        ->where('id_noise_source', '=', $this->attributes['id'])
-                                        ->get();
+                         ->where('id_noise_source', '=', $this->attributes['id'])
+                         ->get();
         $isThereSourceInBasket = !$basket->isEmpty();
         return Attribute::make(
             get: fn () => $isThereSourceInBasket,
