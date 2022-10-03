@@ -38,26 +38,15 @@ class NoiseSourceController extends MainController
     }
 
     /**
-     * Показ всех не согласованных источников шума, с пагинацией
+     * Показ всех не согласованных источников шума
      *
      * @return View
      */
     public function index(): View
     {
         $noiseSourcesNotCheck = $this->noiseSourceRepository->getAllNotCheck();
-        $arrayRowSpan = [];
-        $array = [$noiseSourcesNotCheck[0]->id_file_path];
-        $i = 0;
-        foreach ($noiseSourcesNotCheck as $item) {
-            if ($array[0] === $item->id_file_path) {
-                $i++;
-            } else {
-                $arrayRowSpan[] = $i;
-                $array = [$item->id_file_path];
-                $i = 1;
-            }
-        }
-        $arrayRowSpan[] = $i;
+        $arrayRowSpan = $noiseSourcesNotCheck->countBy('id_file_path')->values();
+
         return view('noise.admin.check_sources', compact('noiseSourcesNotCheck', 'arrayRowSpan'));
     }
 
