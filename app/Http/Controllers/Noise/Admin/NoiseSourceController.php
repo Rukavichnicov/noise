@@ -75,25 +75,32 @@ class NoiseSourceController extends MainController
      */
     public function update(NoiseSourceUpdateRequest $request, $id)
     {
-        $noiseSource = $this->noiseSourceRepository->getEdit($id);
+        try {
+            $noiseSource = $this->noiseSourceRepository->getEdit($id);
+            if (empty($noiseSource)) {
+                throw new Exception("Запись с id=[{$id}] для ИШ не найдена.");
+            }
 
-        if (empty($noiseSource)) {
-            return back()->withErrors(['msg' => "Запись с id=[{$id}] для ИШ не найдена."])->withInput();
-        }
-        $fileNoiseSource = $this->fileNoiseSourceRepository->getFileNoiseSources($noiseSource->id_file_path);
-        if (empty($fileNoiseSource)) {
-            return back()->withErrors(['msg' => "Запись с id=[{$noiseSource->id_file_path}] для описания не найдена."])->withInput();
-        }
+            $fileNoiseSource = $this->fileNoiseSourceRepository->getFileNoiseSources($noiseSource->id_file_path);
+            if (empty($fileNoiseSource)) {
+                throw new Exception("Запись с id=[{$noiseSource->id_file_path}] для описания не найдена.");
+            }
 
-        $data = $request->all();
+            $data = $request->all();
 
-        $result1 = $noiseSource->update($data);
-        $result2 = $fileNoiseSource->update($data);
+            DB::beginTransaction();
+            $isNoiseSourceUpdated = $noiseSource->update($data);
+            $isFileNoiseSourceUpdated = $fileNoiseSource->update($data);
 
-        if ($result1 && $result2) {
-            return redirect()->route('noise.admin.sources.edit', $noiseSource->id)->with(['success' => 'Успешно сохранено']);
-        } else {
-            return back()->withErrors(['msg' => "Ошибка сохранения."])->withInput();
+            if ($isNoiseSourceUpdated && $isFileNoiseSourceUpdated) {
+                DB::commit();
+                return redirect()->route('noise.admin.sources.edit', $noiseSource->id)->with(['success' => 'Успешно сохранено']);
+            } else {
+                throw new Exception('Ошибка обновления записи в базе данных.');
+            }
+        } catch (Exception $exception) {
+            DB::rollBack();
+            return back()->withErrors(['msg' => $exception->getMessage()])->withInput();
         }
     }
 
