@@ -7,7 +7,12 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-body">
-                        @include('noise.main.includes.table_sources_users')
+                        @if(empty($paginator->total()))
+                            <p class="lead text-center">Вы пока не добавили в список ни одного источника шума.
+                                Чтобы добавить, зайдите на вкладку "Источники шума".</p>
+                        @else
+                            @include('noise.main.includes.table_sources_users')
+                        @endif
                     </div>
                 </div>
             </div>
