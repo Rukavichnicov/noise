@@ -73,17 +73,17 @@ class NoiseSourceController extends MainController
      * @param  int  $id
      * @return RedirectResponse
      */
-    public function update(NoiseSourceUpdateRequest $request, $id)
+    public function update(NoiseSourceUpdateRequest $request, int $id): RedirectResponse
     {
         try {
             $noiseSource = $this->noiseSourceRepository->getEdit($id);
             if (empty($noiseSource)) {
-                throw new Exception("Запись с id=[{$id}] для ИШ не найдена.");
+                throw new Exception("Запись с id=[$id] для ИШ не найдена.");
             }
 
             $fileNoiseSource = $this->fileNoiseSourceRepository->getFileNoiseSources($noiseSource->id_file_path);
             if (empty($fileNoiseSource)) {
-                throw new Exception("Запись с id=[{$noiseSource->id_file_path}] для описания не найдена.");
+                throw new Exception("Запись с id=[$noiseSource->id_file_path] для описания не найдена.");
             }
 
             $data = $request->all();
@@ -115,13 +115,17 @@ class NoiseSourceController extends MainController
         try {
             DB::beginTransaction();
             $this->noiseSourceRepository->deleteNoiseSources($idFileSources);
-            $nameFile = ($this->fileNoiseSourceRepository->getFileNoiseSources($idFileSources))->file_name;
-            $oldPathWithName = PATH_FILES_NOT_CHECK . $nameFile;
+            $fileNoiseSources = $this->fileNoiseSourceRepository->getFileNoiseSources($idFileSources);
+            if ($fileNoiseSources === null) {
+                throw new Exception('Не удалось получить запись с id для файла');
+            }
+            $nameFile = $fileNoiseSources->file_name;
+            $pathWithNameNotChecked = PATH_FILES_NOT_CHECK . $nameFile;
             $this->fileNoiseSourceRepository->deleteFileNoiseSources($idFileSources);
-            if (Storage::disk()->exists($oldPathWithName)) {
-                Storage::disk()->delete($oldPathWithName);
+            if (Storage::disk()->exists($pathWithNameNotChecked)) {
+                Storage::disk()->delete($pathWithNameNotChecked);
             } else {
-                throw new Exception('Ошибка удаления');
+                throw new Exception('Ошибка удаления файла в хранилище');
             }
 
             DB::commit();
@@ -136,24 +140,28 @@ class NoiseSourceController extends MainController
      * Согласование источников шума
      *
      * @param int $id_file_sources
+     * @return RedirectResponse
      */
-    public function approve(int $id_file_sources)
+    public function approve(int $id_file_sources): RedirectResponse
     {
         try {
             DB::beginTransaction();
             $this->noiseSourceRepository->approveNoiseSources($id_file_sources);
-
-            $nameFile = ($this->fileNoiseSourceRepository->getFileNoiseSources($id_file_sources))->file_name;
-            $oldPathWithName = PATH_FILES_NOT_CHECK . $nameFile;
-            if (Storage::disk()->exists($oldPathWithName)) {
-                $newPathWithName = PATH_FILES_CHECK . $nameFile;
-                Storage::move($oldPathWithName, $newPathWithName);
+            $fileNoiseSources = $this->fileNoiseSourceRepository->getFileNoiseSources($id_file_sources);
+            if ($fileNoiseSources === null) {
+                throw new Exception('Не удалось получить запись с id для файла');
+            }
+            $nameFile = $fileNoiseSources->file_name;
+            $pathWithNameNotChecked = PATH_FILES_NOT_CHECK . $nameFile;
+            if (Storage::disk()->exists($pathWithNameNotChecked)) {
+                $pathWithNameChecked = PATH_FILES_CHECK . $nameFile;
+                Storage::move($pathWithNameNotChecked, $pathWithNameChecked);
             } else {
                 throw new Exception('Файл источника шума не найден');
             }
 
             DB::commit();
-            return redirect()->route('noise.admin.sources.index')->with(['success' => 'Успешно согласовано']);
+            return back()->with(['success' => 'Успешно согласовано']);
         } catch (Exception $exception) {
             DB::rollBack();
             return back()->withErrors(['msg' => $exception->getMessage()]);
