@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Noise\Main;
 
 use App\Http\Requests\BasketCreateRequest;
 use App\Repositories\BasketRepository;
-use App\Repositories\FileNoiseSourceRepository;
-use App\Repositories\NoiseSourceRepository;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -22,7 +20,9 @@ class BasketController extends MainController
         parent::__construct();
         $this->basketRepository = app(BasketRepository::class);
     }
+
     /**
+     * Показ источников шума в личном списке пользователя
      *
      * @return View
      */
@@ -33,27 +33,29 @@ class BasketController extends MainController
     }
 
     /**
+     * Добавление источника шума в личный список пользователя
      *
      * @param  BasketCreateRequest  $request
      * @return RedirectResponse
      */
     public function store(BasketCreateRequest $request): RedirectResponse
     {
-        try {
-            $arrayInput = $request->input();
-            $this->basketRepository->saveOneModelBD($arrayInput);
+        $arrayInput = $request->input();
+        $saved = $this->basketRepository->saveOneModelBD($arrayInput);
+        if ($saved) {
             return back();
-        } catch (Exception $exception) {
+        } else {
             return back()->withErrors(['msg' => 'Ошибка сохранения']);
         }
     }
 
     /**
+     * Удаление источника шума из личного списка пользователя
      *
      * @param  int  $idNoiseSource
      * @return RedirectResponse
      */
-    public function destroy($idNoiseSource)
+    public function destroy(int $idNoiseSource): RedirectResponse
     {
         try {
             $result = $this->basketRepository->deleteNoiseSourceInBasket($idNoiseSource);
