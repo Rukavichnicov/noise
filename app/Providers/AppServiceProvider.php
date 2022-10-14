@@ -3,8 +3,6 @@
 namespace App\Providers;
 
 use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -27,15 +25,5 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Paginator::useBootstrap();
-
-        DB::listen(function ($query) {
-
-            Log::info(
-                $query->sql,
-                $query->bindings,
-                $query->time
-            );
-
-        });
     }
 }
