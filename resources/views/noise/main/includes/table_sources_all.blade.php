@@ -19,7 +19,9 @@
         <th>Обоснование</th>
         <th>Примечание</th>
         <th>Файл</th>
-        <th>Сбор списка</th>
+        @auth()
+            <th>Сбор списка</th>
+        @endauth
     </tr>
     </thead>
     <tbody>
@@ -45,26 +47,28 @@
             <td>
                 <a href="{{ $item->urlFileCheck }}" target="_blank">Файл</a>
             </td>
-            <td>
-                @if ($item->isThereSourceInBasket)
-                    <form action="{{ route('noise.main.basket.destroy', $item->id) }}" method="post">
-                        @csrf
-                        @method('DELETE')
-                        <button class="form-control-sm btn-danger"
-                                name="delSources"
-                                value="{{ $item->id }}"
-                                title="Удалить из набора">-</button>
-                    </form>
-                @else
-                    <form action="{{ route('noise.main.basket.store') }}" method="post">
-                        @csrf
-                        <button class="form-control-sm btn-primary"
-                                name="addSources"
-                                value="{{ $item->id }}"
-                                title="Добавить в набор">+</button>
-                    </form>
-                @endif
-            </td>
+            @auth()
+                <td>
+                    @if ($item->isThereSourceInBasket)
+                        <form action="{{ route('noise.main.basket.destroy', $item->id) }}" method="post">
+                            @csrf
+                            @method('DELETE')
+                            <button class="form-control-sm btn-danger"
+                                    name="delSources"
+                                    value="{{ $item->id }}"
+                                    title="Удалить из набора">-</button>
+                        </form>
+                    @else
+                        <form action="{{ route('noise.main.basket.store') }}" method="post">
+                            @csrf
+                            <button class="form-control-sm btn-primary"
+                                    name="addSources"
+                                    value="{{ $item->id }}"
+                                    title="Добавить в набор">+</button>
+                        </form>
+                    @endif
+                </td>
+            @endauth
         </tr>
     @endforeach
     </tbody>

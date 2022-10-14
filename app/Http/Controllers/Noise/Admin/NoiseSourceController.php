@@ -9,7 +9,6 @@ use App\Repositories\TypeNoiseSourceRepository;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
@@ -45,7 +44,7 @@ class NoiseSourceController extends MainController
      */
     public function index(): View
     {
-        $this->checkAdmin();
+        $this->userIsAdminOrFail();
         $noiseSourcesNotCheck = $this->noiseSourceRepository->getAllNotCheck();
         $arrayRowSpan = $noiseSourcesNotCheck->countBy('id_file_path')->values();
 
@@ -60,7 +59,7 @@ class NoiseSourceController extends MainController
      */
     public function edit(int $id): View
     {
-        $this->checkAdmin();
+        $this->userIsAdminOrFail();
         $item = $this->noiseSourceRepository->getEdit($id);
         if (empty($item)) {
             abort(404);
@@ -78,7 +77,7 @@ class NoiseSourceController extends MainController
      */
     public function update(NoiseSourceUpdateRequest $request, int $id): RedirectResponse
     {
-        $this->checkAdmin();
+        $this->userIsAdminOrFail();
         try {
             $noiseSource = $this->noiseSourceRepository->getEdit($id);
             if (empty($noiseSource)) {
@@ -116,7 +115,7 @@ class NoiseSourceController extends MainController
      */
     public function destroy(int $idFileSources): RedirectResponse
     {
-        $this->checkAdmin();
+        $this->userIsAdminOrFail();
         try {
             DB::beginTransaction();
             $this->noiseSourceRepository->deleteNoiseSources($idFileSources);
@@ -149,7 +148,7 @@ class NoiseSourceController extends MainController
      */
     public function approve(int $id_file_sources): RedirectResponse
     {
-        $this->checkAdmin();
+        $this->userIsAdminOrFail();
         try {
             DB::beginTransaction();
             $this->noiseSourceRepository->approveNoiseSources($id_file_sources);
@@ -171,12 +170,6 @@ class NoiseSourceController extends MainController
         } catch (Exception $exception) {
             DB::rollBack();
             return back()->withErrors(['msg' => $exception->getMessage()]);
-        }
-    }
-
-    private function checkAdmin() {
-        if (! Gate::allows('admin')) {
-            abort(403, 'У вашего пользователя не достаточно прав');
         }
     }
 }
