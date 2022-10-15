@@ -54,10 +54,10 @@ Route::group($groupDataAdmin, function () {
     Route::resource('sources', \App\Http\Controllers\Noise\Admin\NoiseSourceController::class)
         ->only($methods)
         ->names('noise.admin.sources')
-        ->middleware('auth');
+        ->middleware('verify.user.is.admin');
     Route::patch(
         'approve/{id_file_path}',
         [\App\Http\Controllers\Noise\Admin\NoiseSourceController::class, 'approve']
     )->name('noise.admin.sources.approve')
-     ->middleware('auth');
+     ->middleware('verify.user.is.admin');
 });

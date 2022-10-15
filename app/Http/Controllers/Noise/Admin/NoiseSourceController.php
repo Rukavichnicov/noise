@@ -44,7 +44,6 @@ class NoiseSourceController extends MainController
      */
     public function index(): View
     {
-        $this->userIsAdminOrFail();
         $noiseSourcesNotCheck = $this->noiseSourceRepository->getAllNotCheck();
         $arrayRowSpan = $noiseSourcesNotCheck->countBy('id_file_path')->values();
 
@@ -59,7 +58,6 @@ class NoiseSourceController extends MainController
      */
     public function edit(int $id): View
     {
-        $this->userIsAdminOrFail();
         $item = $this->noiseSourceRepository->getEdit($id);
         if (empty($item)) {
             abort(404);
@@ -77,7 +75,6 @@ class NoiseSourceController extends MainController
      */
     public function update(NoiseSourceUpdateRequest $request, int $id): RedirectResponse
     {
-        $this->userIsAdminOrFail();
         try {
             $noiseSource = $this->noiseSourceRepository->getEdit($id);
             if (empty($noiseSource)) {
@@ -115,7 +112,6 @@ class NoiseSourceController extends MainController
      */
     public function destroy(int $idFileSources): RedirectResponse
     {
-        $this->userIsAdminOrFail();
         try {
             DB::beginTransaction();
             $this->noiseSourceRepository->deleteNoiseSources($idFileSources);
@@ -148,7 +144,6 @@ class NoiseSourceController extends MainController
      */
     public function approve(int $id_file_sources): RedirectResponse
     {
-        $this->userIsAdminOrFail();
         try {
             DB::beginTransaction();
             $this->noiseSourceRepository->approveNoiseSources($id_file_sources);
