@@ -17,7 +17,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
+\Illuminate\Support\Facades\Auth::routes();
 
 //TODO Изменить на свою начальную страницу
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -28,15 +28,20 @@ $groupDataMain = [
 ];
 Route::group($groupDataMain, function () {
     //Для всех пользователей
-    $methodsSources = ['index', 'create', 'store'];
+    $methodsSources = ['create', 'store'];
+    Route::resource('sources', \App\Http\Controllers\Noise\Main\NoiseSourceController::class)
+        ->only(['index'])
+        ->names('noise.main.sources');
     Route::resource('sources', \App\Http\Controllers\Noise\Main\NoiseSourceController::class)
         ->only($methodsSources)
-        ->names('noise.main.sources');
-    // TODO написать правильные методы в роутах
+        ->names('noise.main.sources')
+        ->middleware('auth');
+
     $methodsBasket = ['index', 'create', 'store', 'destroy'];
     Route::resource('basket', \App\Http\Controllers\Noise\Main\BasketController::class)
         ->only($methodsBasket)
-        ->names('noise.main.basket');
+        ->names('noise.main.basket')
+        ->middleware('auth');
 });
 
 $groupDataAdmin = [
@@ -48,9 +53,11 @@ Route::group($groupDataAdmin, function () {
     $methods = ['index', 'edit', 'update', 'destroy', 'approve'];
     Route::resource('sources', \App\Http\Controllers\Noise\Admin\NoiseSourceController::class)
         ->only($methods)
-        ->names('noise.admin.sources');
+        ->names('noise.admin.sources')
+        ->middleware('verify.user.is.admin');
     Route::patch(
         'approve/{id_file_path}',
         [\App\Http\Controllers\Noise\Admin\NoiseSourceController::class, 'approve']
-    )->name('noise.admin.sources.approve');
+    )->name('noise.admin.sources.approve')
+     ->middleware('verify.user.is.admin');
 });

@@ -15,14 +15,10 @@
                             Источники шума
                         </a>
                     </li>
+                    @auth()
                     <li>
                         <a href="http://{{ $_SERVER['HTTP_HOST'] }}/noise/main/sources/create" class="nav-link px-2">
                             Добавить источник
-                        </a>
-                    </li>
-                    <li>
-                        <a href="http://{{ $_SERVER['HTTP_HOST'] }}/noise/admin/sources" class="nav-link px-2">
-                            Проверить ИШ
                         </a>
                     </li>
                     <li>
@@ -30,6 +26,14 @@
                             Свой список ИШ
                         </a>
                     </li>
+                    @endauth
+                    @can('admin')
+                        <li>
+                            <a href="http://{{ $_SERVER['HTTP_HOST'] }}/noise/admin/sources" class="nav-link px-2">
+                                Проверить ИШ
+                            </a>
+                        </li>
+                    @endcan
                 </ul>
 
                 <!-- Right Side Of Navbar -->

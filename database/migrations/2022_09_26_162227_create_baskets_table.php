@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreign('id_user')->references('id')->on('users');
             $table->foreign('id_noise_source')->references('id')->on('noise_sources');
 
-            $this->timestamp('created_at', 0)->nullable();
+            $table->timestamp('created_at', 0)->nullable();
         });
     }
 
