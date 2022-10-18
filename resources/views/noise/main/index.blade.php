@@ -3,6 +3,7 @@
 @section('content')
     <div class="container">
         @include('noise.includes.result_messages')
+        @include('noise.includes.search')
 
         <div class="row justify-content-center">
             <div class="col-md-12">
@@ -18,7 +19,7 @@
         @if($paginator->total() > $paginator->count())
             <br>
             <div class="d-flex justify-content-center">
-                {{ $paginator->links() }}
+                {{ $paginator->appends(['search' => request()->search])->links() }}
             </div>
         @endif
     </div>

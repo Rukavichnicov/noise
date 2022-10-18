@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Noise\Main;
 
 use App\Http\Requests\NoiseSourceCreateRequest;
+use App\Http\Requests\NoiseSourceSearchRequest;
 use App\Repositories\FileNoiseSourceRepository;
 use App\Repositories\NoiseSourceRepository;
 use App\Repositories\TypeNoiseSourceRepository;
@@ -87,5 +88,18 @@ class NoiseSourceController extends MainController
             DB::rollBack();
             return back()->withErrors(['msg' => 'Ошибка сохранения'])->withInput();
         }
+    }
+
+    /**
+     * Поиск источника шума по запросу
+     *
+     * @param NoiseSourceSearchRequest $request
+     * @return View
+     */
+    public function search(NoiseSourceSearchRequest $request): View
+    {
+        $strSearch = $request->search;
+        $paginator = $this->noiseSourceRepository->getFoundWithPaginate(10, "%$strSearch%");
+        return view('noise.main.index', compact('paginator'));
     }
 }

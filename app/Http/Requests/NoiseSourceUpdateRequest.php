@@ -11,7 +11,6 @@ class NoiseSourceUpdateRequest extends FormRequest
      *
      * @return bool
      */
-    // TODO Переопределить сообщение если пользователь не авторизован (не 403 ошибку)
     public function authorize()
     {
         return auth()->check();
