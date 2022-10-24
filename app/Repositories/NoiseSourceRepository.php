@@ -8,47 +8,31 @@ use Illuminate\Support\Facades\Auth;
 
 class NoiseSourceRepository extends CoreRepository
 {
-    /**
-     * @return string
-     */
-    protected function getModelClass(): string
-    {
-        return Model::class;
-    }
-
-    /**
-     * Получить данные проверенных источников шума с пагинацией
-     * @param int|null $countPage
-     * @param bool $agreement
-     * @return LengthAwarePaginator
-     */
-    public function getAllWithPaginate(int $countPage = null): LengthAwarePaginator
-    {
-        $columns = [
-            'id',
-            'check_source',
-            'name',
-            'mark',
-            'distance',
-            'la_31_5',
-            'la_63',
-            'la_125',
-            'la_250',
-            'la_500',
-            'la_1000',
-            'la_2000',
-            'la_4000',
-            'la_8000',
-            'la_eq',
-            'la_max',
-            'remark',
-            'id_file_path',
-            'id_type_of_source',
-            'id_user',
-        ];
+    private array $columnsTableNoiseSource = [
+        'id',
+        'check_source',
+        'name',
+        'mark',
+        'distance',
+        'la_31_5',
+        'la_63',
+        'la_125',
+        'la_250',
+        'la_500',
+        'la_1000',
+        'la_2000',
+        'la_4000',
+        'la_8000',
+        'la_eq',
+        'la_max',
+        'remark',
+        'id_file_path',
+        'id_type_of_source',
+        'id_user',
+    ];
 
         $result = $this->startConditions()
-                       ->select($columns)
+                       ->select($this->columnsTableNoiseSource)
                        ->where('check_source', '=', true)
                        ->orderBy('id', 'ASC')
                        ->with(['fileNoiseSource:id,file_name,foundation'])
@@ -102,31 +86,8 @@ class NoiseSourceRepository extends CoreRepository
      */
     public function getAllNotCheck()
     {
-        $columns = [
-            'id',
-            'check_source',
-            'name',
-            'mark',
-            'distance',
-            'la_31_5',
-            'la_63',
-            'la_125',
-            'la_250',
-            'la_500',
-            'la_1000',
-            'la_2000',
-            'la_4000',
-            'la_8000',
-            'la_eq',
-            'la_max',
-            'remark',
-            'id_file_path',
-            'id_type_of_source',
-            'id_user',
-        ];
-
         $result = $this->startConditions()
-            ->select($columns)
+            ->select($this->columnsTableNoiseSource)
             ->where('check_source', '=', false)
             ->orderBy('id', 'ASC')
             ->with(['fileNoiseSource:id,file_name,foundation'])
