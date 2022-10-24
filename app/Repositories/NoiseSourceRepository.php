@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\NoiseSource as Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 
@@ -31,12 +32,28 @@ class NoiseSourceRepository extends CoreRepository
         'id_user',
     ];
 
+    /**
+     * @return string
+     */
+    protected function getModelClass(): string
+    {
+        return Model::class;
+    }
+
+    /**
+     * Получить данные проверенных источников шума с пагинацией
+     * @param int|null $countPage
+     * @param bool $agreement
+     * @return LengthAwarePaginator
+     */
+    public function getAllWithPaginate(int $countPage = null): LengthAwarePaginator
+    {
         $result = $this->startConditions()
-                       ->select($this->columnsTableNoiseSource)
-                       ->where('check_source', '=', true)
-                       ->orderBy('id', 'ASC')
-                       ->with(['fileNoiseSource:id,file_name,foundation'])
-                       ->paginate($countPage);
+            ->select($this->columnsTableNoiseSource)
+            ->where('check_source', '=', true)
+            ->orderBy('id', 'ASC')
+            ->with(['fileNoiseSource:id,file_name,foundation'])
+            ->paginate($countPage);
         return $result;
     }
 
@@ -48,33 +65,27 @@ class NoiseSourceRepository extends CoreRepository
      */
     public function getFoundWithPaginate(int $countPage = null, string $strSearch): LengthAwarePaginator
     {
-        $columns = [
-            'id',
-            'check_source',
-            'name',
-            'mark',
-            'distance',
-            'la_31_5',
-            'la_63',
-            'la_125',
-            'la_250',
-            'la_500',
-            'la_1000',
-            'la_2000',
-            'la_4000',
-            'la_8000',
-            'la_eq',
-            'la_max',
-            'remark',
-            'id_file_path',
-            'id_type_of_source',
-            'id_user',
-        ];
-
         $result = $this->startConditions()
-            ->select($columns)
+            ->select($this->columnsTableNoiseSource)
             ->where('check_source', '=', true)
             ->where('name', 'LIKE', $strSearch)
+            ->orWhere('mark', 'LIKE', $strSearch)
+            ->orWhere('distance', 'LIKE', $strSearch)
+            ->orWhere('la_31_5', 'LIKE', $strSearch)
+            ->orWhere('la_63', 'LIKE', $strSearch)
+            ->orWhere('la_125', 'LIKE', $strSearch)
+            ->orWhere('la_250', 'LIKE', $strSearch)
+            ->orWhere('la_500', 'LIKE', $strSearch)
+            ->orWhere('la_1000', 'LIKE', $strSearch)
+            ->orWhere('la_2000', 'LIKE', $strSearch)
+            ->orWhere('la_4000', 'LIKE', $strSearch)
+            ->orWhere('la_8000', 'LIKE', $strSearch)
+            ->orWhere('la_eq', 'LIKE', $strSearch)
+            ->orWhere('la_max', 'LIKE', $strSearch)
+            ->orWhere('remark', 'LIKE', $strSearch)
+            ->orWhereHas('fileNoiseSource', function (Builder $query) use ($strSearch) {
+                $query->where('foundation', 'like', $strSearch);
+            })
             ->orderBy('id', 'ASC')
             ->with(['fileNoiseSource:id,file_name,foundation'])
             ->paginate($countPage);
