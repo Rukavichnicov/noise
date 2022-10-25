@@ -99,7 +99,7 @@ class NoiseSourceController extends MainController
     public function search(NoiseSourceSearchRequest $request): View
     {
         $strSearch = $request->search;
-        $paginator = $this->noiseSourceRepository->getFoundWithPaginate(10, "%$strSearch%");
+        $paginator = $this->noiseSourceRepository->getFoundWithPaginate(10, $strSearch);
         return view('noise.main.index', compact('paginator'));
     }
 }

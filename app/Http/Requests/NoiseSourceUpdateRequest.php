@@ -44,7 +44,7 @@ class NoiseSourceUpdateRequest extends FormRequest
         return $rules;
     }
     /**
-     * Получение сообщение об ошибке на определённые правила проверки
+     * Получение сообщения об ошибке на определённые правила проверки
      *
      * @return array
      */
