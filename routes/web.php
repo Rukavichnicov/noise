@@ -46,6 +46,16 @@ Route::group($groupDataMain, function () {
         ->only($methodsBasket)
         ->names('noise.main.basket')
         ->middleware('auth');
+    Route::get(
+        'downloadReport',
+        [\App\Http\Controllers\Noise\Main\BasketController::class, 'downloadReport']
+    )->name('noise.main.basket.downloadReport')
+        ->middleware('auth');
+    Route::get(
+        'downloadArchiveFile',
+        [\App\Http\Controllers\Noise\Main\BasketController::class, 'downloadArchiveFile']
+    )->name('noise.main.basket.downloadArchiveFile')
+        ->middleware('auth');
 });
 
 $groupDataAdmin = [

@@ -12,6 +12,7 @@
                                 Чтобы добавить, зайдите на вкладку "Источники шума".</p>
                         @else
                             @include('noise.main.includes.table_sources_users')
+                            @include('noise.main.includes.buttons_word_and_zip')
                         @endif
                     </div>
                 </div>

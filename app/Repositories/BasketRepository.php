@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Basket as Model;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 
@@ -35,6 +36,28 @@ class BasketRepository extends CoreRepository
                        ->orderBy('id', 'ASC')
                        ->with(['user:id','noiseSource','fileNoiseSource'])
                        ->paginate($countPage);
+        return $result;
+    }
+
+    /**
+     * Получить данные источников шума в корзине пользователя
+     *
+     * @return Collection
+     */
+    public function getAllSourcesInBasket(): Collection
+    {
+        $columns = [
+            'id',
+            'id_user',
+            'id_noise_source'
+        ];
+
+        $result = $this->startConditions()
+                       ->select($columns)
+                       ->where('id_user', '=', Auth::id())
+                       ->orderBy('id', 'ASC')
+                       ->with(['user:id','noiseSource','fileNoiseSource'])
+                       ->get();
         return $result;
     }
 
