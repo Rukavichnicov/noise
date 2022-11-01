@@ -1,6 +1,7 @@
 <div class="row justify-content-center mt-2">
     <div class="col-md-12">
             <form method="get" action="{{ route('noise.main.sources.search') }}">
+                @csrf
                 <div class="row gx-0 mb-2">
                     <div class="col-10 gx-0">
                         <input class="form-control" type="search" name="search" placeholder="Поиск"

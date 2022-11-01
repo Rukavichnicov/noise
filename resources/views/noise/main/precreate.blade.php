@@ -23,6 +23,7 @@
         <div class="row g-3">
             <div class="col-md">
                 <form method="GET" class="row g-3" action="{{ route('noise.main.sources.create') }}">
+                    @csrf
                     <div class="col-md-auto">
                         <label for="severalSources" class="form-label">Введите количество источников шума которые
                             описаны на 1 листе</label>

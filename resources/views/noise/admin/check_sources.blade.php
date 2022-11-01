@@ -61,6 +61,7 @@
                                     <td> {{$item->remark}} </td>
                                     <td>
                                         <form action="{{ route('noise.admin.sources.edit', $item->id) }}" method="get">
+                                            @csrf
                                             <button type="submit" class="form-control-sm">
                                                 Изменить
                                             </button>
