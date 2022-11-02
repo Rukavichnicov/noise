@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Contracts\ArchiveFileSourcesForUser;
 use App\Contracts\ReportListSourcesForUser;
 use App\Services\ReportInWordListSourcesForUser;
+use App\Services\ZipArchiveFileSourcesForUser;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 
@@ -18,6 +20,9 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(ReportListSourcesForUser::class, function ($app) {
             return new ReportInWordListSourcesForUser();
+        });
+        $this->app->bind(ArchiveFileSourcesForUser::class, function ($app) {
+            return new ZipArchiveFileSourcesForUser();
         });
     }
 

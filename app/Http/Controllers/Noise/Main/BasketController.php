@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Noise\Main;
 
+use App\Contracts\ArchiveFileSourcesForUser;
 use App\Contracts\ReportListSourcesForUser;
 use App\Http\Requests\BasketCreateRequest;
 use App\Repositories\BasketRepository;
 use Exception;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Str;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class BasketController extends MainController
 {
@@ -74,20 +75,23 @@ class BasketController extends MainController
      * Скачать таблицу с выбранными ИШ
      *
      */
-    public function downloadReport(ReportListSourcesForUser $report)
+    public function downloadReport(ReportListSourcesForUser $report): BinaryFileResponse
     {
         $report->makeReport();
         $report->saveReport();
-        $fileName = $report->getFileName();
-        return response()->download(public_path($fileName))->deleteFileAfterSend();
+        $filePath = $report->getFileName();
+        return response()->download(public_path($filePath))->deleteFileAfterSend();
     }
 
     /**
      * Скачать архив с файлами обоснования источников шума
      *
+     * @throws Exception
      */
-    public function downloadArchiveFile()
+    public function downloadArchiveFile(ArchiveFileSourcesForUser $archive): BinaryFileResponse
     {
-        dd(__METHOD__);
+        $archive->makeArchive();
+        $filePath = $archive->getFileName();
+        return response()->download(public_path($filePath))->deleteFileAfterSend();
     }
 }
