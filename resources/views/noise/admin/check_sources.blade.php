@@ -1,6 +1,8 @@
 @php use App\Models\NoiseSource; @endphp
 @extends('layouts.app')
 
+@section('title', 'Проверка источников шума')
+
 @section('content')
     <div class="container">
         @include('noise.includes.result_messages')

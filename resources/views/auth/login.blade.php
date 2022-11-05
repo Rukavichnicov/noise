@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Вход в приложение')
+
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
@@ -57,11 +59,12 @@
                                     {{ __('Login') }}
                                 </button>
 
-                                @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
-                                    </a>
-                                @endif
+{{--                                TODO При подключении почтового сервиса активировать функцию сброса пароля --}}
+{{--                                @if (Route::has('password.request'))--}}
+{{--                                    <a class="btn btn-link" href="{{ route('password.request') }}">--}}
+{{--                                        {{ __('Forgot Your Password?') }}--}}
+{{--                                    </a>--}}
+{{--                                @endif--}}
                             </div>
                         </div>
                     </form>

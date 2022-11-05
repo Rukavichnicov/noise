@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Список выбранных источников шума')
+
 @section('content')
     <div class="container">
         @include('noise.includes.result_messages')

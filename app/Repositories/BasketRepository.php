@@ -34,7 +34,7 @@ class BasketRepository extends CoreRepository
                        ->select($columns)
                        ->where('id_user', '=', Auth::id())
                        ->orderBy('id', 'ASC')
-                       ->with(['user:id','noiseSource','fileNoiseSource'])
+                       ->with(['noiseSource','fileNoiseSource'])
                        ->paginate($countPage);
         return $result;
     }
@@ -56,7 +56,7 @@ class BasketRepository extends CoreRepository
                        ->select($columns)
                        ->where('id_user', '=', Auth::id())
                        ->orderBy('id', 'ASC')
-                       ->with(['user:id','noiseSource','fileNoiseSource'])
+                       ->with(['noiseSource','fileNoiseSource'])
                        ->get();
         return $result;
     }

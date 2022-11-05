@@ -1,6 +1,8 @@
 @php     /** @var \App\Models\NoiseSource $item */ @endphp
 @extends('layouts.app')
 
+@section('title', 'Редактирование источника шума')
+
 @section('content')
     <div class="container">
         @include('noise.includes.result_messages')

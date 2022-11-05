@@ -19,9 +19,6 @@ Route::get('/', function () {
 
 \Illuminate\Support\Facades\Auth::routes();
 
-//TODO Изменить на свою начальную страницу
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
 $groupDataMain = [
     'namespace' => 'App\Http\Controllers\Noise\Main',
     'prefix' => 'noise/main',
