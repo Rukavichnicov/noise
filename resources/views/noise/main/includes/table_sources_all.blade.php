@@ -2,22 +2,22 @@
 <table class="table table-sm table-striped align-middle small text-center">
     <thead class="align-middle">
     <tr>
-        <th>Наименование источника шума</th>
-        <th>Марка</th>
-        <th>Дистанция замера</th>
-        <th>31.5</th>
-        <th>63</th>
-        <th>125</th>
-        <th>250</th>
-        <th>500</th>
-        <th>1000</th>
-        <th>2000</th>
-        <th>4000</th>
-        <th>8000</th>
-        <th>La экв</th>
-        <th>La макс</th>
-        <th>Обоснование</th>
-        <th>Примечание</th>
+        <th><a href="{{ $urlForSorting->generateUrlForSorting('name') }}">Наименование источника шума</a></th>
+        <th><a href="{{ $urlForSorting->generateUrlForSorting('mark') }}">Марка</a></th>
+        <th><a href="{{ $urlForSorting->generateUrlForSorting('distance') }}">Дистанция замера</a></th>
+        <th><a href="{{ $urlForSorting->generateUrlForSorting('la_31_5') }}">31.5</a></th>
+        <th><a href="{{ $urlForSorting->generateUrlForSorting('la_63') }}">63</a></th>
+        <th><a href="{{ $urlForSorting->generateUrlForSorting('la_125') }}">125</a></th>
+        <th><a href="{{ $urlForSorting->generateUrlForSorting('la_250') }}">250</a></th>
+        <th><a href="{{ $urlForSorting->generateUrlForSorting('la_500') }}">500</a></th>
+        <th><a href="{{ $urlForSorting->generateUrlForSorting('la_1000') }}">1000</a></th>
+        <th><a href="{{ $urlForSorting->generateUrlForSorting('la_2000') }}">2000</a></th>
+        <th><a href="{{ $urlForSorting->generateUrlForSorting('la_4000') }}">4000</a></th>
+        <th><a href="{{ $urlForSorting->generateUrlForSorting('la_8000') }}">8000</a></th>
+        <th><a href="{{ $urlForSorting->generateUrlForSorting('la_eq') }}">La экв</a></th>
+        <th><a href="{{ $urlForSorting->generateUrlForSorting('la_max') }}">La макс</a></th>
+        <th><a href="{{ $urlForSorting->generateUrlForSorting('foundation') }}">Обоснование</a></th>
+        <th><a href="{{ $urlForSorting->generateUrlForSorting('remark') }}">Примечание</a></th>
         <th>Файл</th>
         @auth()
             <th>Сбор списка</th>

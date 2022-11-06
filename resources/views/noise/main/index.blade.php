@@ -21,7 +21,11 @@
         @if($paginator->total() > $paginator->count())
             <br>
             <div class="d-flex justify-content-center">
-                {{ $paginator->appends(['search' => request()->search])->links() }}
+                {{ $paginator->appends([
+                    'search' => request()->search,
+                    'field' => request()->field,
+                    'direction' => request()->direction,
+                ])->links() }}
             </div>
         @endif
     </div>

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Noise\Main;
 
 use App\Http\Requests\NoiseSourceCreateRequest;
+use App\Http\Requests\NoiseSourceIndexRequest;
 use App\Http\Requests\NoiseSourceSearchRequest;
 use App\Repositories\FileNoiseSourceRepository;
 use App\Repositories\NoiseSourceRepository;
 use App\Repositories\TypeNoiseSourceRepository;
+use App\Services\UrlForSorting;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
@@ -42,10 +44,12 @@ class NoiseSourceController extends MainController
      *
      * @return View
      */
-    public function index(): View
+    public function index(NoiseSourceIndexRequest $request, UrlForSorting $urlForSorting): View
     {
-        $paginator = $this->noiseSourceRepository->getAllWithPaginate(10);
-        return view('noise.main.index', compact('paginator'));
+        $sortField = empty($request->field) ? 'name' : $request->field;
+        $sortDirection = empty($request->direction) ? 'ASC' : $request->direction;
+        $paginator = $this->noiseSourceRepository->getAllWithPaginate(10, $sortField, $sortDirection);
+        return view('noise.main.index', compact('paginator', 'urlForSorting'));
     }
 
     /**
@@ -96,10 +100,12 @@ class NoiseSourceController extends MainController
      * @param NoiseSourceSearchRequest $request
      * @return View
      */
-    public function search(NoiseSourceSearchRequest $request): View
+    public function search(NoiseSourceSearchRequest $request, UrlForSorting $urlForSorting): View
     {
         $strSearch = $request->search;
-        $paginator = $this->noiseSourceRepository->getFoundWithPaginate(10, $strSearch);
-        return view('noise.main.index', compact('paginator'));
+        $sortField = empty($request->field) ? 'name' : $request->field;
+        $sortDirection = empty($request->direction) ? 'ASC' : $request->direction;
+        $paginator = $this->noiseSourceRepository->getFoundWithPaginate(10, $strSearch, $sortField, $sortDirection);
+        return view('noise.main.index', compact('paginator', 'urlForSorting'));
     }
 }

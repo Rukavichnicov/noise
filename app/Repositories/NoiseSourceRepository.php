@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 class NoiseSourceRepository extends CoreRepository
 {
     private array $columnsTableNoiseSource = [
-        'id',
+        'noise_sources.id',
         'check_source',
         'name',
         'mark',
@@ -46,12 +46,15 @@ class NoiseSourceRepository extends CoreRepository
      * @param bool $agreement
      * @return LengthAwarePaginator
      */
-    public function getAllWithPaginate(int $countPage = null): LengthAwarePaginator
+    public function getAllWithPaginate(int $countPage = null,
+                                       string $sortField = 'name',
+                                       string $sortDirection = 'ASC'): LengthAwarePaginator
     {
         $result = $this->startConditions()
             ->select($this->columnsTableNoiseSource)
+            ->join('file_noise_sources', 'file_noise_sources.id', '=', 'id_file_path')
             ->where('check_source', '=', true)
-            ->orderBy('name', 'ASC')
+            ->orderByRaw("ISNULL($sortField), $sortField $sortDirection")
             ->with(['fileNoiseSource:id,file_name,foundation'])
             ->paginate($countPage);
         return $result;
@@ -61,14 +64,20 @@ class NoiseSourceRepository extends CoreRepository
      * Получить данные найденных источников шума с пагинацией
      * @param int|null $countPage
      * @param string $strSearch
+     * @param string $sortField
+     * @param string $sortDirection
      * @return LengthAwarePaginator
      */
-    public function getFoundWithPaginate(int $countPage = null, string $strSearch): LengthAwarePaginator
+    public function getFoundWithPaginate(int $countPage,
+                                         string $strSearch,
+                                         string $sortField = 'name',
+                                         string $sortDirection = 'ASC'): LengthAwarePaginator
     {
         if(is_numeric($strSearch) AND $strSearch <= 200) {
             $strSearch = "%$strSearch%";
             $result = $this->startConditions()
                 ->select($this->columnsTableNoiseSource)
+                ->join('file_noise_sources', 'file_noise_sources.id', '=', 'id_file_path')
                 ->where('check_source', '=', true)
                 ->where('name', 'LIKE', $strSearch)
                 ->orWhere('mark', 'LIKE', $strSearch)
@@ -88,13 +97,14 @@ class NoiseSourceRepository extends CoreRepository
                 ->orWhereHas('fileNoiseSource', function (Builder $query) use ($strSearch) {
                     $query->where('foundation', 'like', $strSearch);
                 })
-                ->orderBy('name', 'ASC')
+                ->orderByRaw("ISNULL($sortField), $sortField $sortDirection")
                 ->with(['fileNoiseSource:id,file_name,foundation'])
                 ->paginate($countPage);
         } else {
             $strSearch = "%$strSearch%";
             $result = $this->startConditions()
                 ->select($this->columnsTableNoiseSource)
+                ->join('file_noise_sources', 'file_noise_sources.id', '=', 'id_file_path')
                 ->where('check_source', '=', true)
                 ->where('name', 'LIKE', $strSearch)
                 ->orWhere('mark', 'LIKE', $strSearch)
@@ -102,7 +112,7 @@ class NoiseSourceRepository extends CoreRepository
                 ->orWhereHas('fileNoiseSource', function (Builder $query) use ($strSearch) {
                     $query->where('foundation', 'like', $strSearch);
                 })
-                ->orderBy('name', 'ASC')
+                ->orderByRaw("ISNULL($sortField), $sortField $sortDirection")
                 ->with(['fileNoiseSource:id,file_name,foundation'])
                 ->paginate($countPage);
         }
