@@ -1,4 +1,8 @@
-@php use App\Models\NoiseSource; @endphp
+@php
+    use App\Models\NoiseSource;
+    use App\Services\UrlForSorting;
+    /** @var UrlForSorting $urlForSorting */
+@endphp
 <table class="table table-sm table-striped align-middle small text-center">
     <thead class="align-middle">
     <tr>
@@ -56,7 +60,8 @@
                             <button class="form-control-sm btn-danger"
                                     name="delSources"
                                     value="{{ $item->id }}"
-                                    title="Удалить из набора">-</button>
+                                    title="Удалить из набора">-
+                            </button>
                         </form>
                     @else
                         <form action="{{ route('noise.main.basket.store') }}" method="post">
@@ -64,7 +69,8 @@
                             <button class="form-control-sm btn-primary"
                                     name="addSources"
                                     value="{{ $item->id }}"
-                                    title="Добавить в набор">+</button>
+                                    title="Добавить в набор">+
+                            </button>
                         </form>
                     @endif
                 </td>
