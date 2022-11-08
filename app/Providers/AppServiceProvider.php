@@ -7,6 +7,7 @@ use App\Contracts\ReportListSourcesForUser;
 use App\Services\ReportInWordListSourcesForUser;
 use App\Services\ZipArchiveFileSourcesForUser;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -34,5 +35,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Paginator::useBootstrap();
+        if ($this->app->environment('production')) {
+            URL::forceScheme('https');
+        }
     }
 }
