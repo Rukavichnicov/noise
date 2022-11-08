@@ -5,3 +5,4 @@
 
 При работе использовались PHP 8.1, Laravel 9, Bootstrap 5, MySQL, Docker.
 
+Сайт можно увидеть по ссылке https://noisesources.ru/
