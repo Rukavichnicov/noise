@@ -94,7 +94,7 @@ class NoiseSourceController extends MainController
 
             if ($isNoiseSourceUpdated && $isFileNoiseSourceUpdated) {
                 DB::commit();
-                return redirect()->route('noise.admin.sources.edit', $noiseSource->id)->with(['success' => 'Успешно сохранено']);
+                return redirect()->route('noise.admin.sources.index')->with(['success' => 'Успешно изменено']);
             } else {
                 throw new Exception('Ошибка обновления записи в базе данных.');
             }

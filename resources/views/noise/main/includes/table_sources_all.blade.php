@@ -29,6 +29,12 @@
     </tr>
     </thead>
     <tbody>
+    @if(! $paginator->hasPages())
+        <tr>
+            <td colspan="18" height="50"> К сожалению ничего не найдено, если вы найдете паспорт на данный источник можете добавить его в данную базу данных. </td>
+        </tr>
+    @endif
+
     @foreach($paginator as $item)
         @php /** @var NoiseSource $item */ @endphp
         <tr>

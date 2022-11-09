@@ -42,6 +42,8 @@ class NoiseSourceController extends MainController
     /**
      * Показ всех согласованных источников шума, с пагинацией
      *
+     * @param NoiseSourceIndexRequest $request
+     * @param UrlForSorting $urlForSorting
      * @return View
      */
     public function index(NoiseSourceIndexRequest $request, UrlForSorting $urlForSorting): View
@@ -87,7 +89,8 @@ class NoiseSourceController extends MainController
             $downloadableFileNoiseSource->store(PATH_FILES_NOT_CHECK);
             DB::commit();
 
-            return redirect()->route('noise.main.sources.index')->with(['success' => 'Успешно сохранено']);
+            return redirect()->route('noise.main.sources.index')
+                             ->with(['success' => 'Успешно сохранено, после проверки администратора ваш источник появиться в базе данных']);
         } catch (Exception $exception) {
             DB::rollBack();
             return back()->withErrors(['msg' => 'Ошибка сохранения'])->withInput();
@@ -98,6 +101,7 @@ class NoiseSourceController extends MainController
      * Поиск источника шума по запросу
      *
      * @param NoiseSourceSearchRequest $request
+     * @param UrlForSorting $urlForSorting
      * @return View
      */
     public function search(NoiseSourceSearchRequest $request, UrlForSorting $urlForSorting): View
