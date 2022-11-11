@@ -62,6 +62,28 @@ class BasketRepository extends CoreRepository
     }
 
     /**
+     * Получить данные источников шума в корзине пользователя без связей
+     *
+     * @return array
+     */
+    public function getAllSourcesInBasketWithoutRelation(): array
+    {
+        $columns = [
+            'id_noise_source'
+        ];
+        $result = [];
+        $baskets = $this->startConditions()
+            ->select($columns)
+            ->where('id_user', '=', Auth::id())
+            ->get()
+            ->all();
+        foreach ($baskets as $item) {
+            $result[] = $item->id_noise_source;
+        }
+        return $result;
+    }
+
+    /**
      * Пытается найти в корзине у пользователя источник шума
      */
     public function findInBasketUser($idNoiseSource): array

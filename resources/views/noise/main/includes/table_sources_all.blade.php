@@ -59,7 +59,7 @@
             </td>
             @auth()
                 <td>
-                    @if ($item->isThereSourceInBasket)
+                    @if (in_array($item->id, $arrayIDSourcesInBasket))
                         <form action="{{ route('noise.main.basket.destroy', $item->id) }}" method="post">
                             @csrf
                             @method('DELETE')

@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -37,7 +36,6 @@ use Illuminate\Support\Facades\Storage;
  * @property int $id_user
  * @property string $urlFileCheck
  * @property string $urlFileNotCheck
- * @property boolean $isThereSourceInBasket
  *
  */
 class NoiseSource extends Model
@@ -87,23 +85,6 @@ class NoiseSource extends Model
         $url = Storage::url($path);
         return Attribute::make(
             get: fn () => $url,
-        );
-    }
-
-    /**
-     * Узнать есть ли ИШ в списке пользователя
-     *
-     * @return Attribute
-     */
-    public function isThereSourceInBasket(): Attribute
-    {
-        $basket = new Basket();
-        $basket = $basket->where('id_user', '=', Auth::id())
-                         ->where('id_noise_source', '=', $this->attributes['id'])
-                         ->get();
-        $isThereSourceInBasket = !$basket->isEmpty();
-        return Attribute::make(
-            get: fn () => $isThereSourceInBasket,
         );
     }
 
