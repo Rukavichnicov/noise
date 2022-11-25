@@ -38,9 +38,9 @@ Route::group($groupDataMain, function () {
         [\App\Http\Controllers\Noise\Main\NoiseSourceController::class, 'search']
     )->name('noise.main.sources.search');
 
-    $methodsBasket = ['index', 'create', 'store', 'destroy'];
+    $resourceMethodsBasket = ['index', 'store', 'destroy'];
     Route::resource('basket', \App\Http\Controllers\Noise\Main\BasketController::class)
-        ->only($methodsBasket)
+        ->only($resourceMethodsBasket)
         ->names('noise.main.basket')
         ->middleware('auth');
     Route::get(
