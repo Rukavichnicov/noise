@@ -31,7 +31,7 @@ class AccessToPageTest extends TestCase
 
     public function test_access_search_sources_page()
     {
-        $response = $this->get('/noise/main/search?search=поиск&submit_search=Поиск');
+        $response = $this->get('/noise/main/search?search=ЛИАЗ-677+%28М%29&submit_search=Поиск');
 
         $response->assertStatus(200);
     }
@@ -45,11 +45,7 @@ class AccessToPageTest extends TestCase
 
     public function test_access_sources_create_page()
     {
-        $user = new User();
-        $user->id = 10;
-        $user->name = 'Admin';
-        $user->password = Hash::make('password');
-        $user->id_role = USUAL_USER;
+        $user = $this->createAdminUser();
 
         $response = $this->actingAs($user)->get('/noise/main/sources/create');
 
@@ -65,11 +61,7 @@ class AccessToPageTest extends TestCase
 
     public function test_access_sources_basket_page()
     {
-        $user = new User();
-        $user->id = 10;
-        $user->name = 'Admin';
-        $user->password = Hash::make('password');
-        $user->id_role = USUAL_USER;
+        $user = $this->createUsualUser();
 
         $response = $this->actingAs($user)->get('noise/main/basket');
 
@@ -85,11 +77,7 @@ class AccessToPageTest extends TestCase
 
     public function test_admin_page_with_sources_is_unavailable_for_usually_user()
     {
-        $user = new User();
-        $user->id = 10;
-        $user->name = 'Admin';
-        $user->password = Hash::make('password');
-        $user->id_role = USUAL_USER;
+        $user = $this->createUsualUser();
 
         $response = $this->actingAs($user)->get('/noise/admin/sources');
 
@@ -105,11 +93,8 @@ class AccessToPageTest extends TestCase
 
     public function test_access_admin_page_with_new_sources()
     {
-        $user = new User();
-        $user->id = 10;
-        $user->name = 'Admin';
-        $user->password = Hash::make('password');
-        $user->id_role = ADMIN_USER;
+        $user = $this->createAdminUser();
+
         $response = $this->actingAs($user)->get('/noise/admin/sources');
 
         $response->assertStatus(200);
@@ -117,11 +102,7 @@ class AccessToPageTest extends TestCase
 
     public function test_admin_page_edit_sources_is_unavailable_for_usually_user()
     {
-        $user = new User();
-        $user->id = 10;
-        $user->name = 'Admin';
-        $user->password = Hash::make('password');
-        $user->id_role = USUAL_USER;
+        $user = $this->createUsualUser();
 
         $response = $this->actingAs($user)->get('noise/admin/sources/1/edit');
 
@@ -137,11 +118,8 @@ class AccessToPageTest extends TestCase
 
     public function test_access_admin_page_edit_sources()
     {
-        $user = new User();
-        $user->id = 10;
-        $user->name = 'Admin';
-        $user->password = Hash::make('password');
-        $user->id_role = ADMIN_USER;
+        $user = $this->createAdminUser();
+
         $response = $this->actingAs($user)->get('noise/admin/sources/1/edit');
 
         $response->assertStatus(200);
