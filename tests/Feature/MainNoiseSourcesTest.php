@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use \Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class MainNoiseSourcesTest extends TestCase
@@ -16,6 +17,7 @@ class MainNoiseSourcesTest extends TestCase
 
         $response = $this->actingAs($user)->post('/noise/main/sources', $arrayDataOneNoiseSource);
         $response->assertRedirect('noise/main/sources');
+        Storage::disk()->assertExists(PATH_FILES_NOT_CHECK.$arrayDataOneNoiseSource['file_name']->hashName());
     }
 
     public function test_store_two_noise_sources()
@@ -44,6 +46,7 @@ class MainNoiseSourcesTest extends TestCase
 
         $response = $this->actingAs($user)->post('/noise/main/sources', $arrayDataTwoNoiseSource);
         $response->assertRedirect('noise/main/sources');
+        Storage::disk()->assertExists(PATH_FILES_NOT_CHECK.$arrayDataTwoNoiseSource['file_name']->hashName());
     }
 
     public function test_store_one_noise_sources_without_file_is_invalid()
@@ -67,6 +70,7 @@ class MainNoiseSourcesTest extends TestCase
         $response = $this->actingAs($user)->post('/noise/main/sources', $arrayDataOneNoiseSource);
         $response->assertRedirect();
         $response->assertInvalid(['name_1']);
+        Storage::disk()->assertMissing(PATH_FILES_NOT_CHECK.$arrayDataOneNoiseSource['file_name']->hashName());
     }
 
     public function test_store_one_noise_sources_without_foundation_is_invalid()
@@ -79,5 +83,6 @@ class MainNoiseSourcesTest extends TestCase
 
         $response->assertRedirect();
         $response->assertInvalid(['foundation']);
+        Storage::disk()->assertMissing(PATH_FILES_NOT_CHECK.$arrayDataOneNoiseSource['file_name']->hashName());
     }
 }
