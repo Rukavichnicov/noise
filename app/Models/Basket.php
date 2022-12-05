@@ -70,14 +70,21 @@ class Basket extends Model
     /**
      * Получить URL для открытия файла ИШ в корзине
      *
-     * @return Attribute
+     * @return ?Attribute
      */
-    public function urlFileCheck(): Attribute
+    public function urlFileCheck(): ?Attribute
     {
-        $path = PATH_FILES_CHECK . $this->fileNoiseSource->file_name;
-        $url = Storage::url($path);
-        return Attribute::make(
-            get: fn () => $url,
-        );
+        if (isset($this->fileNoiseSource)) {
+            $path = PATH_FILES_CHECK . $this->fileNoiseSource->file_name;
+            $url = Storage::url($path);
+            return Attribute::make(
+                get: fn() => $url,
+            );
+        } else {
+            $url = Storage::url(PATH_FILES_CHECK. 'file_not_found.pdf');
+            return Attribute::make(
+                get: fn() => $url,
+            );
+        }
     }
 }
