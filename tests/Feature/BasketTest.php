@@ -11,7 +11,7 @@ class BasketTest extends TestCase
     public function test_adding_sources_in_basket_without_authorization_is_invalid()
     {
         $response = $this->post('noise/main/basket', [
-            "addSources" => "93"
+            "addSources" => "1"
         ]);
 
         $response->assertRedirect('/login');
@@ -23,7 +23,7 @@ class BasketTest extends TestCase
         $user->id = 2;
 
         $response = $this->actingAs($user)->post('noise/main/basket', [
-            "addSources" => "93"
+            "addSources" => "1"
         ]);
 
         $response->assertRedirect('/');
@@ -37,10 +37,10 @@ class BasketTest extends TestCase
         $user->id = 2;
 
         $response = $this->actingAs($user)->post('noise/main/basket', [
-            "addSources" => "93"
+            "addSources" => "1"
         ]);
         $response = $this->actingAs($user)->post('noise/main/basket', [
-            "addSources" => "93"
+            "addSources" => "1"
         ]);
 
         $response->assertInvalid(['addSources']);
@@ -50,7 +50,7 @@ class BasketTest extends TestCase
 
     public function test_deleting_sources_from_basket_without_authorization_is_invalid()
     {
-        $response = $this->delete('noise/main/basket/93');
+        $response = $this->delete('noise/main/basket/1');
 
         $response->assertRedirect('/login');
     }
@@ -59,9 +59,9 @@ class BasketTest extends TestCase
     {
         $user = $this->createUsualUser();
         $user->id = 2;
-        Basket::query()->insert(['id_user' => $user->id, 'id_noise_source' => '93']);
+        Basket::query()->insert(['id_user' => $user->id, 'id_noise_source' => '1']);
 
-        $response = $this->actingAs($user)->delete('noise/main/basket/93');
+        $response = $this->actingAs($user)->delete('noise/main/basket/1');
 
         $response->assertRedirect('/');
     }
@@ -70,10 +70,10 @@ class BasketTest extends TestCase
     {
         $user = $this->createUsualUser();
         $user->id = 2;
-        Basket::query()->insert(['id_user' => $user->id, 'id_noise_source' => '93']);
+        Basket::query()->insert(['id_user' => $user->id, 'id_noise_source' => '1']);
 
-        $response = $this->actingAs($user)->delete('noise/main/basket/93');
-        $response = $this->actingAs($user)->delete('noise/main/basket/93');
+        $response = $this->actingAs($user)->delete('noise/main/basket/1');
+        $response = $this->actingAs($user)->delete('noise/main/basket/1');
 
         $response->assertSessionHasErrors();
     }

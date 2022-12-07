@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Models\FileNoiseSource;
+use App\Models\NoiseSource;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use \Illuminate\Http\UploadedFile;
@@ -18,6 +20,11 @@ class MainNoiseSourcesTest extends TestCase
         $response = $this->actingAs($user)->post('/noise/main/sources', $arrayDataOneNoiseSource);
         $response->assertRedirect('noise/main/sources');
         Storage::disk()->assertExists(PATH_FILES_NOT_CHECK.$arrayDataOneNoiseSource['file_name']->hashName());
+
+        $fileSource = FileNoiseSource::firstWhere('file_name', $arrayDataOneNoiseSource['file_name']->hashName());
+        NoiseSource::where('id_file_path', '=', $fileSource->id)->delete();
+        $fileSource->destroy($fileSource->id);
+        Storage::disk()->delete(PATH_FILES_NOT_CHECK.$arrayDataOneNoiseSource['file_name']->hashName());
     }
 
     public function test_store_two_noise_sources()
@@ -47,6 +54,11 @@ class MainNoiseSourcesTest extends TestCase
         $response = $this->actingAs($user)->post('/noise/main/sources', $arrayDataTwoNoiseSource);
         $response->assertRedirect('noise/main/sources');
         Storage::disk()->assertExists(PATH_FILES_NOT_CHECK.$arrayDataTwoNoiseSource['file_name']->hashName());
+
+        $fileSource = FileNoiseSource::firstWhere('file_name', $arrayDataTwoNoiseSource['file_name']->hashName());
+        NoiseSource::where('id_file_path', '=', $fileSource->id)->delete();
+        $fileSource->destroy($fileSource->id);
+        Storage::disk()->delete(PATH_FILES_NOT_CHECK.$arrayDataTwoNoiseSource['file_name']->hashName());
     }
 
     public function test_store_one_noise_sources_without_file_is_invalid()
