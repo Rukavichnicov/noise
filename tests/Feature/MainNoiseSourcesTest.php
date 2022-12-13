@@ -4,9 +4,6 @@ namespace Tests\Feature;
 
 use App\Models\FileNoiseSource;
 use App\Models\NoiseSource;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use \Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -18,11 +15,12 @@ class MainNoiseSourcesTest extends TestCase
         $arrayDataOneNoiseSource = $this->createValidDataOneNoiseSource();
 
         $response = $this->actingAs($user)->post('/noise/main/sources', $arrayDataOneNoiseSource);
+
         $response->assertRedirect('noise/main/sources');
         Storage::disk()->assertExists(PATH_FILES_NOT_CHECK.$arrayDataOneNoiseSource['file_name']->hashName());
 
-        $fileSource = FileNoiseSource::firstWhere('file_name', $arrayDataOneNoiseSource['file_name']->hashName());
-        NoiseSource::where('id_file_path', '=', $fileSource->id)->delete();
+        $fileSource = FileNoiseSource::query()->firstWhere('file_name', $arrayDataOneNoiseSource['file_name']->hashName());
+        NoiseSource::query()->where('id_file_path', '=', $fileSource->id)->delete();
         $fileSource->destroy($fileSource->id);
         Storage::disk()->delete(PATH_FILES_NOT_CHECK.$arrayDataOneNoiseSource['file_name']->hashName());
     }
@@ -52,11 +50,12 @@ class MainNoiseSourcesTest extends TestCase
         ]);
 
         $response = $this->actingAs($user)->post('/noise/main/sources', $arrayDataTwoNoiseSource);
+
         $response->assertRedirect('noise/main/sources');
         Storage::disk()->assertExists(PATH_FILES_NOT_CHECK.$arrayDataTwoNoiseSource['file_name']->hashName());
 
-        $fileSource = FileNoiseSource::firstWhere('file_name', $arrayDataTwoNoiseSource['file_name']->hashName());
-        NoiseSource::where('id_file_path', '=', $fileSource->id)->delete();
+        $fileSource = FileNoiseSource::query()->firstWhere('file_name', $arrayDataTwoNoiseSource['file_name']->hashName());
+        NoiseSource::query()->where('id_file_path', '=', $fileSource->id)->delete();
         $fileSource->destroy($fileSource->id);
         Storage::disk()->delete(PATH_FILES_NOT_CHECK.$arrayDataTwoNoiseSource['file_name']->hashName());
     }
@@ -67,9 +66,9 @@ class MainNoiseSourcesTest extends TestCase
         $arrayDataOneNoiseSource = $this->createValidDataOneNoiseSource();
         $arrayDataOneNoiseSource['file_name'] = '';
 
-        $response = $this->actingAs($user)->post('/noise/main/sources', $arrayDataOneNoiseSource);
+        $response = $this->from('noise/main/sources/create')->actingAs($user)->post('/noise/main/sources', $arrayDataOneNoiseSource);
 
-        $response->assertRedirect();
+        $response->assertRedirect('noise/main/sources/create');
         $response->assertInvalid(['file_name']);
     }
 
@@ -79,8 +78,8 @@ class MainNoiseSourcesTest extends TestCase
         $arrayDataOneNoiseSource = $this->createValidDataOneNoiseSource();
         $arrayDataOneNoiseSource['name_1'] = '';
 
-        $response = $this->actingAs($user)->post('/noise/main/sources', $arrayDataOneNoiseSource);
-        $response->assertRedirect();
+        $response = $this->from('noise/main/sources/create')->actingAs($user)->post('/noise/main/sources', $arrayDataOneNoiseSource);
+        $response->assertRedirect('noise/main/sources/create');
         $response->assertInvalid(['name_1']);
         Storage::disk()->assertMissing(PATH_FILES_NOT_CHECK.$arrayDataOneNoiseSource['file_name']->hashName());
     }
@@ -91,9 +90,9 @@ class MainNoiseSourcesTest extends TestCase
         $arrayDataOneNoiseSource = $this->createValidDataOneNoiseSource();
         $arrayDataOneNoiseSource['foundation'] = '';
 
-        $response = $this->actingAs($user)->post('/noise/main/sources', $arrayDataOneNoiseSource);
+        $response = $this->from('noise/main/sources/create')->actingAs($user)->post('/noise/main/sources', $arrayDataOneNoiseSource);
 
-        $response->assertRedirect();
+        $response->assertRedirect('noise/main/sources/create');
         $response->assertInvalid(['foundation']);
         Storage::disk()->assertMissing(PATH_FILES_NOT_CHECK.$arrayDataOneNoiseSource['file_name']->hashName());
     }

@@ -170,7 +170,7 @@ class NoiseSourceRepository extends CoreRepository
     public function approveNoiseSources(int $id_file_sources)
     {
         $item = Model::where('id_file_path', '=', $id_file_sources);
-        $item->update(['check_source' => true]);
+        $item->update(['check_source' => APPROVE]);
     }
 
     /**

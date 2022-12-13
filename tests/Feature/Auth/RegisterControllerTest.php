@@ -12,18 +12,17 @@ class RegisterControllerTest extends TestCase
 {
     public function test_register_a_user_success()
     {
-        $user = new User;
-        $user->name = 'TestUser';
-        $user->email = 'testemail@yandex.ru';
-        $user->password = Hash::make('password');
-        $user->save();
+        $response = $this->from('register')->post('register', [
+            'name' => 'TestUser',
+            'email' => 'testemail@yandex.ru',
+            'password' => 'password',
+            'password_confirmation' => 'password',
+        ]);
 
-        $newUser = DB::table('users')->find($user->id);
+        $response->assertRedirect('');
+        $response->assertSessionHasNoErrors();
 
-        $this->assertSame('TestUser', $newUser->name);
-        $this->assertSame('testemail@yandex.ru', $newUser->email);
-        $this->assertTrue(Hash::check('password', $newUser->password));
-
+        $user = User::query()->firstWhere('name', '=', 'TestUser');
         $user->delete();
     }
 
@@ -35,15 +34,17 @@ class RegisterControllerTest extends TestCase
         $user->password = Hash::make('password');
         $user->save();
 
-        try {
-            $userWithExistingEmail = new User;
-            $userWithExistingEmail->name = 'TestUser1';
-            $userWithExistingEmail->email = 'testemail@yandex.ru';
-            $userWithExistingEmail->password = Hash::make('password1');
-            $userWithExistingEmail->save();
-        } catch (QueryException $exception) {
-            $this->assertInstanceOf(QueryException::class, $exception);
-            $user->delete();
-        }
+        $response = $this->from('register')->post('register', [
+            'name' => 'TestUser',
+            'email' => 'testemail@yandex.ru',
+            'password' => 'password',
+            'password_confirmation' => 'password',
+        ]);
+
+        $response->assertRedirect('register');
+        $response->assertSessionHasErrors();
+        $response->assertInvalid(['email']);
+
+        $user->delete();
     }
 }

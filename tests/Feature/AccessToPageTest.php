@@ -2,8 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 class AccessToPageTest extends TestCase
@@ -57,6 +55,7 @@ class AccessToPageTest extends TestCase
         $response = $this->get('/noise/main/sources/create');
 
         $response->assertStatus(302);
+        $response->assertRedirect('login');
     }
 
     public function test_access_sources_basket_page()
@@ -73,6 +72,7 @@ class AccessToPageTest extends TestCase
         $response = $this->get('noise/main/basket');
 
         $response->assertStatus(302);
+        $response->assertRedirect('login');
     }
 
     public function test_admin_page_with_sources_is_unavailable_for_usually_user()

@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\Models\Basket;
-use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 class BasketTest extends TestCase
@@ -22,11 +21,11 @@ class BasketTest extends TestCase
         $user = $this->createUsualUser();
         $user->id = 2;
 
-        $response = $this->actingAs($user)->post('noise/main/basket', [
+        $response = $this->from('noise/main/sources')->actingAs($user)->post('noise/main/basket', [
             "addSources" => "1"
         ]);
 
-        $response->assertRedirect('/');
+        $response->assertRedirect('noise/main/sources');
 
         Basket::query()->where('id_user', '=', $user->id)->delete();
     }
@@ -36,7 +35,7 @@ class BasketTest extends TestCase
         $user = $this->createUsualUser();
         $user->id = 2;
 
-        $response = $this->actingAs($user)->post('noise/main/basket', [
+        $this->actingAs($user)->post('noise/main/basket', [
             "addSources" => "1"
         ]);
         $response = $this->actingAs($user)->post('noise/main/basket', [
@@ -61,9 +60,9 @@ class BasketTest extends TestCase
         $user->id = 2;
         Basket::query()->insert(['id_user' => $user->id, 'id_noise_source' => '1']);
 
-        $response = $this->actingAs($user)->delete('noise/main/basket/1');
+        $response = $this->from('noise/main/sources')->actingAs($user)->delete('noise/main/basket/1');
 
-        $response->assertRedirect('/');
+        $response->assertRedirect('noise/main/sources');
     }
 
     public function test_double_deleting_sources_from_basket_is_invalid()
@@ -72,7 +71,7 @@ class BasketTest extends TestCase
         $user->id = 2;
         Basket::query()->insert(['id_user' => $user->id, 'id_noise_source' => '1']);
 
-        $response = $this->actingAs($user)->delete('noise/main/basket/1');
+        $this->actingAs($user)->delete('noise/main/basket/1');
         $response = $this->actingAs($user)->delete('noise/main/basket/1');
 
         $response->assertSessionHasErrors();
