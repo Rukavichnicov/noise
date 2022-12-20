@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Basket;
+use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 class BasketTest extends TestCase
@@ -75,5 +76,56 @@ class BasketTest extends TestCase
         $response = $this->actingAs($user)->delete('noise/main/basket/1');
 
         $response->assertSessionHasErrors();
+    }
+
+    public function test_loading_report_is_unavailable_for_guest()
+    {
+        $response = $this->from(route('noise.main.basket.index'))->get(route('noise.main.basket.downloadReport'));
+
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login'));
+    }
+
+    public function test_loading_archive()
+    {
+        $user = $this->createUsualUser();
+        DB::beginTransaction();
+        Basket::query()->where('id_user', '=', $user->id)->delete();
+        Basket::query()->insert([
+            'id_user' => $user->id,
+            'id_noise_source' => 1,
+            'created_at' => now(),
+        ]);
+
+        $response = $this->from(route('noise.main.basket.index'))->actingAs($user)->get(route('noise.main.basket.downloadArchiveFile'));
+
+        $response->assertDownload();
+
+        DB::rollBack();
+        $content = $response->headers->get('content-disposition');
+        $loadedFileName = mb_substr($content, 21);
+        unlink(public_path($loadedFileName));
+    }
+
+    public function test_loading_archive_without_sources_is_invalid()
+    {
+        $user = $this->createUsualUser();
+        DB::beginTransaction();
+        Basket::query()->where('id_user', '=', $user->id)->delete();
+
+        $response = $this->from(route('noise.main.basket.index'))->actingAs($user)->get(route('noise.main.basket.downloadArchiveFile'));
+
+        $response->assertSessionHasErrors();
+        $response->assertRedirect(route('noise.main.basket.index'));
+
+        DB::rollBack();
+    }
+
+    public function test_loading_archive_is_unavailable_for_guest()
+    {
+        $response = $this->from(route('noise.main.basket.index'))->get(route('noise.main.basket.downloadArchiveFile'));
+
+        $response->assertStatus(302);
+        $response->assertRedirect(route('login'));
     }
 }
