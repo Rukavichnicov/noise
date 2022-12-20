@@ -88,10 +88,18 @@ class BasketController extends MainController
      *
      * @throws Exception
      */
-    public function downloadArchiveFile(ArchiveFileSourcesForUser $archive): BinaryFileResponse
+    public function downloadArchiveFile(ArchiveFileSourcesForUser $archive): BinaryFileResponse|RedirectResponse
     {
-        $archive->makeArchive();
-        $filePath = $archive->getFileName();
-        return response()->download(public_path($filePath))->deleteFileAfterSend();
+        try {
+            $archive->makeArchive();
+            $filePath = $archive->getFileName();
+            if (file_exists(public_path($filePath))) {
+                return response()->download(public_path($filePath))->deleteFileAfterSend();
+            } else {
+                throw new Exception('Не удалось создать архив');
+            }
+        } catch (Exception $exception) {
+            return back()->withErrors($exception->getMessage());
+        }
     }
 }
