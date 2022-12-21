@@ -143,7 +143,7 @@ class ReportInWordListSourcesForUser implements ReportListSourcesForUser
     public function saveReport()
     {
         $objWriter = IOFactory::createWriter($this->wordReport);
-        $objWriter->save($this->fileName);
+        $objWriter->save(public_path($this->fileName));
     }
 
     /**

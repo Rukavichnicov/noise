@@ -21,6 +21,8 @@ class BasketTest extends TestCase
     {
         $user = $this->createUsualUser();
         $user->id = 2;
+        DB::beginTransaction();
+        Basket::query()->where('id_user', '=', $user->id)->delete();
 
         $response = $this->from('noise/main/sources')->actingAs($user)->post('noise/main/basket', [
             "addSources" => "1"
@@ -28,13 +30,15 @@ class BasketTest extends TestCase
 
         $response->assertRedirect('noise/main/sources');
 
-        Basket::query()->where('id_user', '=', $user->id)->delete();
+        DB::rollBack();
     }
 
     public function test_double_adding_sources_in_basket_is_invalid()
     {
         $user = $this->createUsualUser();
         $user->id = 2;
+        DB::beginTransaction();
+        Basket::query()->where('id_user', '=', $user->id)->delete();
 
         $this->actingAs($user)->post('noise/main/basket', [
             "addSources" => "1"
@@ -45,7 +49,7 @@ class BasketTest extends TestCase
 
         $response->assertInvalid(['addSources']);
 
-        Basket::query()->where('id_user', '=', $user->id)->delete();
+        DB::rollBack();
     }
 
     public function test_deleting_sources_from_basket_without_authorization_is_invalid()
@@ -78,6 +82,27 @@ class BasketTest extends TestCase
         $response->assertSessionHasErrors();
     }
 
+    public function test_loading_report()
+    {
+        $user = $this->createUsualUser();
+        DB::beginTransaction();
+        Basket::query()->where('id_user', '=', $user->id)->delete();
+        Basket::query()->insert([
+            'id_user' => $user->id,
+            'id_noise_source' => 1,
+            'created_at' => now(),
+        ]);
+
+        $response = $this->from(route('noise.main.basket.index'))->actingAs($user)->get(route('noise.main.basket.downloadReport'));
+        ob_start();
+        $response->sendContent();
+        ob_end_clean();
+
+        $response->assertDownload();
+
+        DB::rollBack();
+    }
+
     public function test_loading_report_is_unavailable_for_guest()
     {
         $response = $this->from(route('noise.main.basket.index'))->get(route('noise.main.basket.downloadReport'));
@@ -98,13 +123,13 @@ class BasketTest extends TestCase
         ]);
 
         $response = $this->from(route('noise.main.basket.index'))->actingAs($user)->get(route('noise.main.basket.downloadArchiveFile'));
+        ob_start();
+        $response->sendContent();
+        ob_end_clean();
 
         $response->assertDownload();
 
         DB::rollBack();
-        $content = $response->headers->get('content-disposition');
-        $loadedFileName = mb_substr($content, 21);
-        unlink(public_path($loadedFileName));
     }
 
     public function test_loading_archive_without_sources_is_invalid()
