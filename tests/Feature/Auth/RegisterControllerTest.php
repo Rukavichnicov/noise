@@ -12,7 +12,8 @@ class RegisterControllerTest extends TestCase
 {
     public function test_register_a_user_success()
     {
-        $response = $this->from('register')->post('register', [
+        DB::beginTransaction();
+        $response = $this->from(route('register'))->post(route('register'), [
             'name' => 'TestUser',
             'email' => 'testemail@yandex.ru',
             'password' => 'password',
@@ -22,29 +23,29 @@ class RegisterControllerTest extends TestCase
         $response->assertRedirect('');
         $response->assertSessionHasNoErrors();
 
-        $user = User::query()->firstWhere('name', '=', 'TestUser');
-        $user->delete();
+        DB::rollBack();
     }
 
     public function test_registration_a_user_with_existing_email_is_invalid()
     {
+        DB::beginTransaction();
         $user = new User;
         $user->name = 'TestUser';
         $user->email = 'testemail@yandex.ru';
         $user->password = Hash::make('password');
         $user->save();
 
-        $response = $this->from('register')->post('register', [
+        $response = $this->from(route('register'))->post(route('register'), [
             'name' => 'TestUser',
             'email' => 'testemail@yandex.ru',
             'password' => 'password',
             'password_confirmation' => 'password',
         ]);
 
-        $response->assertRedirect('register');
+        $response->assertRedirect(route('register'));
         $response->assertSessionHasErrors();
         $response->assertInvalid(['email']);
 
-        $user->delete();
+        DB::rollBack();
     }
 }

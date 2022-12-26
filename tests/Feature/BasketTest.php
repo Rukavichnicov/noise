@@ -10,11 +10,13 @@ class BasketTest extends TestCase
 {
     public function test_adding_sources_in_basket_without_authorization_is_invalid()
     {
-        $response = $this->post('noise/main/basket', [
+        DB::beginTransaction();
+        $response = $this->post(route('noise.main.basket.store'), [
             "addSources" => "1"
         ]);
 
-        $response->assertRedirect('/login');
+        $response->assertRedirect(route('login'));
+        DB::rollBack();
     }
 
     public function test_adding_sources_in_basket()
@@ -24,26 +26,30 @@ class BasketTest extends TestCase
         DB::beginTransaction();
         Basket::query()->where('id_user', '=', $user->id)->delete();
 
-        $response = $this->from('noise/main/sources')->actingAs($user)->post('noise/main/basket', [
-            "addSources" => "1"
-        ]);
+        $response = $this
+            ->from(route('noise.main.sources.index'))
+            ->actingAs($user)
+            ->post(
+                route('noise.main.basket.store'),
+                ["addSources" => "1"]
+            );
 
-        $response->assertRedirect('noise/main/sources');
+        $response->assertRedirect(route('noise.main.sources.index'));
 
         DB::rollBack();
     }
 
     public function test_double_adding_sources_in_basket_is_invalid()
     {
+        DB::beginTransaction();
         $user = $this->createUsualUser();
         $user->id = 2;
-        DB::beginTransaction();
         Basket::query()->where('id_user', '=', $user->id)->delete();
 
-        $this->actingAs($user)->post('noise/main/basket', [
+        $this->actingAs($user)->post(route('noise.main.basket.store'), [
             "addSources" => "1"
         ]);
-        $response = $this->actingAs($user)->post('noise/main/basket', [
+        $response = $this->actingAs($user)->post(route('noise.main.basket.store'), [
             "addSources" => "1"
         ]);
 
@@ -54,32 +60,41 @@ class BasketTest extends TestCase
 
     public function test_deleting_sources_from_basket_without_authorization_is_invalid()
     {
-        $response = $this->delete('noise/main/basket/1');
+        $response = $this->delete(route('noise.main.basket.destroy', ['basket' => '1']));
 
-        $response->assertRedirect('/login');
+        $response->assertRedirect(route('login'));
     }
 
     public function test_deleting_sources_from_basket()
     {
+        DB::beginTransaction();
         $user = $this->createUsualUser();
         $user->id = 2;
         Basket::query()->insert(['id_user' => $user->id, 'id_noise_source' => '1']);
 
-        $response = $this->from('noise/main/sources')->actingAs($user)->delete('noise/main/basket/1');
+        $response = $this
+            ->from(route('noise.main.sources.index'))
+            ->actingAs($user)
+            ->delete(
+                route('noise.main.basket.destroy', ['basket' => '1'])
+            );
 
-        $response->assertRedirect('noise/main/sources');
+        $response->assertRedirect(route('noise.main.sources.index'));
+        DB::rollBack();
     }
 
     public function test_double_deleting_sources_from_basket_is_invalid()
     {
+        DB::beginTransaction();
         $user = $this->createUsualUser();
         $user->id = 2;
         Basket::query()->insert(['id_user' => $user->id, 'id_noise_source' => '1']);
 
-        $this->actingAs($user)->delete('noise/main/basket/1');
-        $response = $this->actingAs($user)->delete('noise/main/basket/1');
+        $this->actingAs($user)->delete(route('noise.main.basket.destroy', ['basket' => '1']));
+        $response = $this->actingAs($user)->delete(route('noise.main.basket.destroy', ['basket' => '1']));
 
         $response->assertSessionHasErrors();
+        DB::rollBack();
     }
 
     public function test_loading_report()
@@ -93,7 +108,9 @@ class BasketTest extends TestCase
             'created_at' => now(),
         ]);
 
-        $response = $this->from(route('noise.main.basket.index'))->actingAs($user)->get(route('noise.main.basket.downloadReport'));
+        $response = $this->from(route('noise.main.basket.index'))->actingAs($user)->get(
+            route('noise.main.basket.downloadReport')
+        );
         ob_start();
         $response->sendContent();
         ob_end_clean();
@@ -122,7 +139,9 @@ class BasketTest extends TestCase
             'created_at' => now(),
         ]);
 
-        $response = $this->from(route('noise.main.basket.index'))->actingAs($user)->get(route('noise.main.basket.downloadArchiveFile'));
+        $response = $this->from(route('noise.main.basket.index'))->actingAs($user)->get(
+            route('noise.main.basket.downloadArchiveFile')
+        );
         ob_start();
         $response->sendContent();
         ob_end_clean();
@@ -138,7 +157,9 @@ class BasketTest extends TestCase
         DB::beginTransaction();
         Basket::query()->where('id_user', '=', $user->id)->delete();
 
-        $response = $this->from(route('noise.main.basket.index'))->actingAs($user)->get(route('noise.main.basket.downloadArchiveFile'));
+        $response = $this->from(route('noise.main.basket.index'))->actingAs($user)->get(
+            route('noise.main.basket.downloadArchiveFile')
+        );
 
         $response->assertSessionHasErrors();
         $response->assertRedirect(route('noise.main.basket.index'));
