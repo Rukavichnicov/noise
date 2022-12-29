@@ -17,27 +17,27 @@ class BasketRepository extends CoreRepository
         return Model::class;
     }
 
-    /**
-     * Получить данные источников шума в корзине пользователя с пагинацией
-     * @param int|null $countPage
-     * @return LengthAwarePaginator
-     */
-    public function getAllWithPaginate(int $countPage = null): LengthAwarePaginator
-    {
-        $columns = [
-            'id',
-            'id_user',
-            'id_noise_source'
-        ];
-
-        $result = $this->startConditions()
-                       ->select($columns)
-                       ->where('id_user', '=', Auth::id())
-                       ->orderBy('id', 'ASC')
-                       ->with(['noiseSource','fileNoiseSource'])
-                       ->paginate($countPage);
-        return $result;
-    }
+//    /**
+//     * Получить данные источников шума в корзине пользователя с пагинацией
+//     * @param int|null $countPage
+//     * @return LengthAwarePaginator
+//     */
+//    public function getAllWithPaginate(int $countPage = null): LengthAwarePaginator
+//    {
+//        $columns = [
+//            'id',
+//            'id_user',
+//            'id_noise_source'
+//        ];
+//
+//        $result = $this->startConditions()
+//                       ->select($columns)
+//                       ->where('id_user', '=', Auth::id())
+//                       ->orderBy('id', 'ASC')
+//                       ->with(['noiseSource','fileNoiseSource'])
+//                       ->paginate($countPage);
+//        return $result;
+//    }
 
     /**
      * Получить данные источников шума в корзине пользователя

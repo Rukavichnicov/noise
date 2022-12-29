@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Noise\Main;
 use App\Contracts\ArchiveFileSourcesForUser;
 use App\Contracts\ReportListSourcesForUser;
 use App\Http\Requests\BasketCreateRequest;
+use App\Models\Basket;
 use App\Repositories\BasketRepository;
 use Exception;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -27,11 +29,18 @@ class BasketController extends MainController
     /**
      * Показ источников шума в личном списке пользователя
      *
+     * @param Basket $basket
      * @return View
      */
-    public function index(): View
+    public function index(Basket $basket): View
     {
-        $paginator = $this->basketRepository->getAllWithPaginate(10);
+        $paginator = $basket
+            ->query()
+            ->select(['id_user', 'id_noise_source'])
+            ->where('id_user', '=', Auth::id())
+            ->with(['noiseSource', 'fileNoiseSource'])
+            ->paginate(10);
+
         return view('noise.main.basket_sources', compact('paginator'));
     }
 
@@ -43,7 +52,7 @@ class BasketController extends MainController
      */
     public function store(BasketCreateRequest $request): RedirectResponse
     {
-        $arrayInput = $request->input();
+        $arrayInput = $request->validated();
         $saved = $this->basketRepository->saveOneModelBD($arrayInput);
         if ($saved) {
             return back();
