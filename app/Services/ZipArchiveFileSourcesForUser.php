@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Contracts\ArchiveFileSourcesForUser;
-use App\Repositories\BasketRepository;
+use App\Models\Basket;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -13,9 +13,9 @@ use ZipArchive;
 class ZipArchiveFileSourcesForUser implements ArchiveFileSourcesForUser
 {
     /**
-     * @var BasketRepository
+     * @var Basket
      */
-    private BasketRepository $basketRepository;
+    private Basket $basket;
 
     /**
      * @var string
@@ -38,7 +38,7 @@ class ZipArchiveFileSourcesForUser implements ArchiveFileSourcesForUser
 
     public function __construct()
     {
-        $this->basketRepository = app(BasketRepository::class);
+        $this->basket = new Basket();
         $this->zip = new ZipArchive();
         $this->fileName = Str::random(10) . '.zip';
         $this->setArrayNameFile();
@@ -50,7 +50,7 @@ class ZipArchiveFileSourcesForUser implements ArchiveFileSourcesForUser
      */
     public function getData(): Collection
     {
-        return $this->basketRepository->getAllSourcesInBasket();
+        return $this->basket->getAllSourcesInBasket();
     }
 
     /**

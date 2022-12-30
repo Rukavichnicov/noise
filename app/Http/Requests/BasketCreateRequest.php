@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Basket;
 use App\Rules\ExistSourceInBasketUser;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -23,10 +24,10 @@ class BasketCreateRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(Basket $basket)
     {
         return [
-            'addSources' => ['numeric', 'required', 'exists:noise_sources,id', new ExistSourceInBasketUser()]
+            'addSources' => ['numeric', 'required', 'exists:noise_sources,id', new ExistSourceInBasketUser($basket)]
         ];
     }
     /**

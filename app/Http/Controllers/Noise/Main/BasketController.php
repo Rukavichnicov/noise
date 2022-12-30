@@ -6,7 +6,6 @@ use App\Contracts\ArchiveFileSourcesForUser;
 use App\Contracts\ReportListSourcesForUser;
 use App\Http\Requests\BasketCreateRequest;
 use App\Models\Basket;
-use App\Repositories\BasketRepository;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -15,15 +14,9 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class BasketController extends MainController
 {
-    /**
-     * @var BasketRepository
-     */
-    private BasketRepository $basketRepository;
-
     public function __construct()
     {
         parent::__construct();
-        $this->basketRepository = app(BasketRepository::class);
     }
 
     /**
@@ -34,12 +27,8 @@ class BasketController extends MainController
      */
     public function index(Basket $basket): View
     {
-        $paginator = $basket
-            ->query()
-            ->select(['id_user', 'id_noise_source'])
-            ->where('id_user', '=', Auth::id())
-            ->with(['noiseSource', 'fileNoiseSource'])
-            ->paginate(10);
+        $idCurrentUser = Auth::id();
+        $paginator = $basket->getAllSourcesInBasketWithPaginate($idCurrentUser);
 
         return view('noise.main.basket_sources', compact('paginator'));
     }
@@ -50,10 +39,10 @@ class BasketController extends MainController
      * @param  BasketCreateRequest  $request
      * @return RedirectResponse
      */
-    public function store(BasketCreateRequest $request): RedirectResponse
+    public function store(BasketCreateRequest $request, Basket $basket): RedirectResponse
     {
         $arrayInput = $request->validated();
-        $saved = $this->basketRepository->saveOneModelBD($arrayInput);
+        $saved = $basket->saveOneModelBD($arrayInput);
         if ($saved) {
             return back();
         } else {
@@ -70,7 +59,8 @@ class BasketController extends MainController
     public function destroy(int $idNoiseSource): RedirectResponse
     {
         try {
-            $result = $this->basketRepository->deleteNoiseSourceInBasket($idNoiseSource);
+            $basket = new Basket();
+            $result = $basket->deleteNoiseSourceInBasket($idNoiseSource);
             if($result === 0) {
                 throw new Exception('Ошибка удаления файла из списка');
             }

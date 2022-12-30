@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Contracts\ReportListSourcesForUser;
-use App\Repositories\BasketRepository;
+use App\Models\Basket;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Str;
 use PhpOffice\PhpWord\Exception\Exception;
@@ -14,9 +14,9 @@ use PhpOffice\PhpWord\SimpleType\Jc;
 class ReportInWordListSourcesForUser implements ReportListSourcesForUser
 {
     /**
-     * @var BasketRepository
+     * @var Basket
      */
-    private BasketRepository $basketRepository;
+    private Basket $basket;
 
     /**
      * @var PhpWord
@@ -80,7 +80,7 @@ class ReportInWordListSourcesForUser implements ReportListSourcesForUser
 
     public function __construct()
     {
-        $this->basketRepository = app(BasketRepository::class);
+        $this->basket = new Basket();
         $this->wordReport = new PhpWord();
         $this->fileName = Str::random(10) . '.docx';
     }
@@ -90,7 +90,7 @@ class ReportInWordListSourcesForUser implements ReportListSourcesForUser
      */
     public function getData(): Collection
     {
-        return $this->basketRepository->getAllSourcesInBasket();
+        return $this->basket->getAllSourcesInBasket();
     }
 
     /**

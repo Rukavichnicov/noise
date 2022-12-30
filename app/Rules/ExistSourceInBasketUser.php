@@ -2,23 +2,23 @@
 
 namespace App\Rules;
 
-use App\Repositories\BasketRepository;
+use App\Models\Basket;
 use Illuminate\Contracts\Validation\Rule;
 
 class ExistSourceInBasketUser implements Rule
 {
     /**
-     * @var BasketRepository
+     * @var Basket
      */
-    private BasketRepository $basketRepository;
+    private Basket $basket;
     /**
      * Create a new rule instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Basket $basket)
     {
-        $this->basketRepository = app(BasketRepository::class);
+        $this->basket = $basket;
     }
 
     /**
@@ -27,7 +27,7 @@ class ExistSourceInBasketUser implements Rule
      */
     public function passes($attribute, $value)
     {
-        $response = empty($this->basketRepository->findInBasketUser($value));
+        $response = empty($this->basket->findInBasketUser($value));
         return $response;
     }
 

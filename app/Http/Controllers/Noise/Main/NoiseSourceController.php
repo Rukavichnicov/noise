@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Noise\Main;
 use App\Http\Requests\NoiseSourceCreateRequest;
 use App\Http\Requests\NoiseSourceIndexRequest;
 use App\Http\Requests\NoiseSourceSearchRequest;
-use App\Repositories\BasketRepository;
+use App\Models\Basket;
 use App\Repositories\FileNoiseSourceRepository;
 use App\Repositories\NoiseSourceRepository;
 use App\Repositories\TypeNoiseSourceRepository;
@@ -32,10 +32,10 @@ class NoiseSourceController extends MainController
      */
     private FileNoiseSourceRepository $fileNoiseSourceRepository;
 
-    /**
-     * @var BasketRepository
-     */
-    private BasketRepository $basketRepository;
+//    /**
+//     * @var BasketRepository
+//     */
+//    private BasketRepository $basketRepository;
 
     public function __construct()
     {
@@ -43,7 +43,7 @@ class NoiseSourceController extends MainController
         $this->noiseSourceRepository = app(NoiseSourceRepository::class);
         $this->typeNoiseSourceRepository = app(TypeNoiseSourceRepository::class);
         $this->fileNoiseSourceRepository = app(FileNoiseSourceRepository::class);
-        $this->basketRepository = app(BasketRepository::class);
+//        $this->basketRepository = app(BasketRepository::class);
     }
 
     /**
@@ -53,12 +53,12 @@ class NoiseSourceController extends MainController
      * @param UrlForSorting $urlForSorting
      * @return View
      */
-    public function index(NoiseSourceIndexRequest $request, UrlForSorting $urlForSorting): View
+    public function index(NoiseSourceIndexRequest $request, UrlForSorting $urlForSorting, Basket $basket): View
     {
         $sortField = empty($request->field) ? 'name' : $request->field;
         $sortDirection = empty($request->direction) ? 'ASC' : $request->direction;
         $paginator = $this->noiseSourceRepository->getAllWithPaginate(10, $sortField, $sortDirection);
-        $arrayIDSourcesInBasket = $this->basketRepository->getAllSourcesInBasketWithoutRelation();
+        $arrayIDSourcesInBasket = $basket->getAllSourcesInBasketWithoutRelation();
         return view('noise.main.index', compact('paginator', 'urlForSorting', 'arrayIDSourcesInBasket'));
     }
 
@@ -112,13 +112,13 @@ class NoiseSourceController extends MainController
      * @param UrlForSorting $urlForSorting
      * @return View
      */
-    public function search(NoiseSourceSearchRequest $request, UrlForSorting $urlForSorting): View
+    public function search(NoiseSourceSearchRequest $request, UrlForSorting $urlForSorting, Basket $basket): View
     {
         $strSearch = $request->search;
         $sortField = empty($request->field) ? 'name' : $request->field;
         $sortDirection = empty($request->direction) ? 'ASC' : $request->direction;
         $paginator = $this->noiseSourceRepository->getFoundWithPaginate(10, $strSearch, $sortField, $sortDirection);
-        $arrayIDSourcesInBasket = $this->basketRepository->getAllSourcesInBasketWithoutRelation();
+        $arrayIDSourcesInBasket = $basket->getAllSourcesInBasketWithoutRelation();
         return view('noise.main.index', compact('paginator', 'urlForSorting', 'arrayIDSourcesInBasket'));
     }
 }
