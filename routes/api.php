@@ -14,6 +14,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+//Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//    return $request->user();
+//});
+$groupDataMain = [
+    'namespace' => 'App\Http\Controllers\Api\Main',
+];
+Route::group($groupDataMain, function () {
+    Route::resource('ajax', \App\Http\Controllers\Api\Main\AjaxController::class)
+        ->only(['index'])
+        ->names('api.ajax');;
 });

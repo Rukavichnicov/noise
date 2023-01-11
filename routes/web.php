@@ -17,6 +17,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/ajax', function () {
+    return view('ajax');
+});
+
 \Illuminate\Support\Facades\Auth::routes();
 
 $groupDataMain = [
@@ -70,5 +74,5 @@ Route::group($groupDataAdmin, function () {
         'approve/{id_file_path}',
         [\App\Http\Controllers\Noise\Admin\NoiseSourceController::class, 'approve']
     )->name('noise.admin.sources.approve')
-     ->middleware('verify.user.is.admin');
+        ->middleware('verify.user.is.admin');
 });
