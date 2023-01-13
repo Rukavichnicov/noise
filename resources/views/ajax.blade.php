@@ -23,22 +23,51 @@
             </div>
         </div>
     </div>
-    <script type="text/javascript"
-            src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+{{--    <script type="text/javascript"--}}
+{{--            src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>--}}
 
     <script>
-        $("#get-name").on("submit", function (event) {
-            $.ajax({
-                url: '{{ route('api.ajax.index') }}',
-                method: 'get',
-                dataType: 'json',
-                data: $(this).serialize(),
-                success: function (data) {
-                    let nameShow = document.getElementById("name_show");
-                    nameShow.innerHTML = 'Имя вашего источника шума: ' + data.noiseSource;
-                }
-            });
-            event.preventDefault();
+        {{--$("#get-name").on("submit", function (event) {--}}
+        {{--    $.ajax({--}}
+        {{--        url: '{{ route('api.ajax.index') }}',--}}
+        {{--        method: 'get',--}}
+        {{--        dataType: 'json',--}}
+        {{--        data: $(this).serialize(),--}}
+        {{--        success: function (data) {--}}
+        {{--            let nameShow = document.getElementById("name_show");--}}
+        {{--            nameShow.innerHTML = 'Имя вашего источника шума: ' + data.noiseSource;--}}
+        {{--        }--}}
+        {{--    });--}}
+        {{--    event.preventDefault();--}}
+        {{--});--}}
+        document.addEventListener("DOMContentLoaded", () => {
+
+            const ajaxSend = async (formData) => {
+                const response = await fetch('{{ route('api.ajax.index') }}', {
+                    method: 'get',
+                    body: formData
+                });
+                return await response.json();
+            };
+
+            if (document.querySelector("form")) {
+                const forms = document.querySelectorAll("form");
+
+                forms.forEach(form => {
+                    form.addEventListener("submit", function (e) {
+                        e.preventDefault();
+                        const formData = new FormData(this);
+
+                        ajaxSend(formData)
+                            .then((response) => {
+                                let nameShow = document.getElementById("name_show");
+                                nameShow.innerHTML = 'Имя вашего источника шума: ' + response.noiseSource;
+                            })
+                            .catch((err) => console.error(err))
+                    });
+                });
+            }
+
         });
     </script>
 @endsection

@@ -25,3 +25,10 @@ Route::group($groupDataMain, function () {
         ->only(['index'])
         ->names('api.ajax');;
 });
+
+Route::group($groupDataMain, function () {
+    $resourceMethodsBasket = ['store', 'destroy'];
+    Route::resource('basket', \App\Http\Controllers\Api\Main\BasketController::class)
+        ->only($resourceMethodsBasket)
+        ->names('api.noise.main.basket');
+});

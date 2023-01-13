@@ -31,7 +31,9 @@
     <tbody>
     @if($paginator->count() === 0)
         <tr>
-            <td colspan="18" height="50"> К сожалению ничего не найдено, если вы найдете паспорт на данный источник можете добавить его в данную базу данных. </td>
+            <td colspan="18" height="50"> К сожалению ничего не найдено, если вы найдете паспорт на данный источник
+                можете добавить его в данную базу данных.
+            </td>
         </tr>
     @endif
 
@@ -63,6 +65,7 @@
                         <form action="{{ route('noise.main.basket.destroy', $item->id) }}" method="post">
                             @csrf
                             @method('DELETE')
+                            <input type="hidden" id="user_id" name="user_id" value="{{ auth()->id() }}">
                             <button class="form-control-sm btn-danger"
                                     name="delSources"
                                     value="{{ $item->id }}"
@@ -70,8 +73,9 @@
                             </button>
                         </form>
                     @else
-                        <form action="{{ route('noise.main.basket.store') }}" method="post">
+                        <form action="{{ route('api.noise.main.basket.store') }}" method="post">
                             @csrf
+                            <input type="hidden" id="user_id" name="user_id" value="{{ auth()->id() }}">
                             <button class="form-control-sm btn-primary"
                                     name="addSources"
                                     value="{{ $item->id }}"
@@ -85,3 +89,33 @@
     @endforeach
     </tbody>
 </table>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+
+        const ajaxSend = async (formData) => {
+            const response = await fetch('{{ route('api.noise.main.basket.store') }}', {
+                method: 'post',
+                body: formData
+            });
+            return await response.json();
+        };
+
+        if (document.querySelector("form")) {
+            const forms = document.querySelectorAll('form');
+
+            forms.forEach(form => {
+                form.addEventListener('form', function (e) {
+                    e.preventDefault();
+                    const formData = new FormData(this);
+
+                    ajaxSend(formData)
+                        .then((response) => {
+                            console.log(response);
+                        })
+                        .catch((err) => console.error(err))
+                });
+            });
+        }
+
+    });
+</script>
