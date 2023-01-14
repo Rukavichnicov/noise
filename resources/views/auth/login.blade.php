@@ -59,12 +59,11 @@
                                     {{ __('Login') }}
                                 </button>
 
-{{--                                TODO При подключении почтового сервиса активировать функцию сброса пароля --}}
-{{--                                @if (Route::has('password.request'))--}}
-{{--                                    <a class="btn btn-link" href="{{ route('password.request') }}">--}}
-{{--                                        {{ __('Forgot Your Password?') }}--}}
-{{--                                    </a>--}}
-{{--                                @endif--}}
+                                @if (Route::has('password.request'))
+                                    <a class="btn btn-link" href="{{ route('password.request') }}">
+                                        {{ __('Forgot Your Password?') }}
+                                    </a>
+                                @endif
                             </div>
                         </div>
                     </form>
