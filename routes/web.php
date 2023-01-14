@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -72,3 +73,4 @@ Route::group($groupDataAdmin, function () {
     )->name('noise.admin.sources.approve')
      ->middleware('verify.user.is.admin');
 });
+Route::get('send', [\App\Http\Controllers\MailController::class, 'send']);
